@@ -5,19 +5,1085 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Historiebog</title>
+<meta name="description" content="Historiebog: forløb, tidslinje og værktøjer til historie på Middelfart Gymnasium.">
+<meta name="theme-color" content="#121a2e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f4fa3'/%3E%3Cpath d='M16 10c-2.8-1.9-6.3-2.4-10-2v14c3.7-.4 7.2.1 10 2 2.8-1.9 6.3-2.4 10-2V8c-3.7-.4-7.2.1-10 2z' fill='%23f6f1e7'/%3E%3Cpath d='M16 10v14' stroke='%231f4fa3' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preload" href="forside/fraunces.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-body{margin:0;font-family:Georgia,serif;background:#f6f1e7;color:#2b2622;display:grid;place-items:center;min-height:100vh;text-align:center;padding:16px}
-h1{font-size:2.6rem;margin:0 0 .4rem}
-p{font-size:1.1rem;color:#6b5f52;margin:0 0 1.6rem}
-a{display:inline-block;font-size:1.2rem;color:#fff;background:#1f4fa3;text-decoration:none;padding:.7rem 1.4rem;border-radius:8px}
-a:hover{background:#163c7f}
+@font-face{font-family:"Fraunces";src:url("forside/fraunces.woff2") format("woff2");font-weight:100 900;font-display:swap}
+
+:root{
+  --papir:#f6f1e7;
+  --papir-moerk:#ece3d1;
+  --kort:#fffcf6;
+  --blaek:#1b2130;
+  --blaek-bloed:#535a68;
+  --streg:#dccfb7;
+  --blaa:#1f4fa3;
+  --blaa-moerk:#163a7c;
+  --blaa-lys:#e4ebf8;
+  --okker:#b9822a;
+  --okker-lys:#f4e6c6;
+  --roed:#a8442b;
+  --groen:#2c7a4b;
+  --groen-lys:#e2f1e7;
+  --roed-lys:#f8e4dd;
+  --nat:#121a2e;
+  --skrift-titel:"Fraunces",Georgia,"Times New Roman",serif;
+  --skrift-tekst:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Helvetica Neue",Arial,sans-serif;
+  --skygge:0 1px 2px rgba(27,33,48,.06),0 8px 28px rgba(27,33,48,.09);
+  --skygge-hoej:0 2px 4px rgba(27,33,48,.08),0 18px 44px rgba(27,33,48,.16);
+  --bredde:1180px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--papir);color:var(--blaek);font-family:var(--skrift-tekst);font-size:1.0625rem;line-height:1.6}
+img{max-width:100%;display:block}
+a{color:var(--blaa)}
+h1,h2,h3,h4{font-family:var(--skrift-titel);font-weight:600;line-height:1.12;margin:0;letter-spacing:-.005em}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--okker);outline-offset:3px;border-radius:6px}
+.indre{max-width:var(--bredde);margin:0 auto;padding:0 24px}
+.skjult-tekst{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Toplinje ---------- */
+.top{position:absolute;top:0;left:0;right:0;z-index:5;color:var(--papir)}
+.top .indre{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:22px;padding-bottom:22px}
+.maerke{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;font-family:var(--skrift-titel);font-size:1.45rem;font-weight:600;letter-spacing:.005em}
+.maerke svg{width:34px;height:34px;flex:none}
+.top nav ul{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.top nav a{display:block;color:inherit;text-decoration:none;font-size:.95rem;padding:8px 12px;border-radius:999px;opacity:.9}
+.top nav a:hover{background:rgba(246,241,231,.14);opacity:1}
+
+/* ---------- Forsidebillede ---------- */
+.helt{position:relative;min-height:clamp(560px,86vh,780px);display:flex;align-items:center;overflow:hidden;background:var(--nat);color:var(--papir)}
+.helt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:68% 45%}
+.helt::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(18,26,46,.78) 0,rgba(18,26,46,0) 130px),
+  linear-gradient(0deg,rgba(18,26,46,.75) 0%,rgba(18,26,46,0) 34%),
+  linear-gradient(90deg,rgba(18,26,46,.95) 0%,rgba(18,26,46,.86) 36%,rgba(18,26,46,.38) 68%,rgba(18,26,46,.12) 100%)}
+.helt .indre{position:relative;z-index:1;width:100%;padding-top:120px;padding-bottom:150px}
+.overlinje,.blok-hoved p.overlinje,.opgave-top p.overlinje{font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8a5d14}
+.helt .overlinje{color:#e7c27a}
+.helt h1{font-size:clamp(2.5rem,6vw,4.7rem);max-width:12ch;margin:14px 0 22px;font-weight:600}
+.helt p.ingress{font-size:clamp(1.08rem,1.6vw,1.28rem);max-width:36rem;color:rgba(246,241,231,.9);line-height:1.55}
+.knapper{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.knap{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font-weight:600;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease,box-shadow .15s ease;font-size:1rem;line-height:1.2}
+.knap:hover{transform:translateY(-1px)}
+.knap svg{width:18px;height:18px;flex:none}
+.knap-lys{background:var(--papir);color:var(--nat)}
+.knap-lys:hover{background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.knap-ramme{border-color:rgba(246,241,231,.55);color:var(--papir)}
+.knap-ramme:hover{border-color:var(--papir);background:rgba(246,241,231,.08)}
+.knap-blaa{background:var(--blaa);color:#fff}
+.knap-blaa:hover{background:var(--blaa-moerk)}
+.knap-blaa:disabled{background:#9aa7c2;cursor:not-allowed;transform:none}
+.knap-stille{background:transparent;border-color:var(--streg);color:var(--blaek)}
+.knap-stille:hover{border-color:var(--blaek-bloed)}
+.billedtekst{position:absolute;right:24px;bottom:104px;z-index:1;font-size:.78rem;color:rgba(246,241,231,.7);font-style:italic}
+
+/* ---------- Genveje ---------- */
+.genveje{position:relative;z-index:3;margin-top:-76px}
+.genveje ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.genvej{display:flex;gap:16px;align-items:flex-start;height:100%;padding:22px 22px 20px;background:var(--kort);border:1px solid var(--streg);border-radius:16px;box-shadow:var(--skygge);text-decoration:none;color:var(--blaek);transition:transform .18s ease,box-shadow .18s ease}
+.genvej:hover{transform:translateY(-3px);box-shadow:var(--skygge-hoej)}
+.genvej .ikon{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--okker-lys);color:#8a5d14}
+.genvej .ikon svg{width:24px;height:24px}
+.genvej h3{font-size:1.18rem;margin-bottom:4px}
+.genvej p{font-size:.95rem;color:var(--blaek-bloed);line-height:1.45}
+.genvej .pil{margin-left:auto;align-self:center;color:var(--blaa);opacity:.6;transition:transform .18s ease,opacity .18s}
+.genvej:hover .pil{transform:translateX(3px);opacity:1}
+
+/* ---------- Afsnit ---------- */
+section.blok{padding:92px 0}
+.blok-hoved{max-width:44rem;margin-bottom:40px}
+.blok-hoved h2{font-size:clamp(2rem,3.8vw,2.9rem);margin:10px 0 14px}
+.blok-hoved p{color:var(--blaek-bloed);font-size:1.1rem}
+
+/* ---------- Forløb ---------- */
+.forloeb{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);background:var(--kort);border:1px solid var(--streg);border-radius:20px;overflow:hidden;box-shadow:var(--skygge)}
+.forloeb-billede{position:relative;min-height:320px;background:#2a2f2b}
+.forloeb-billede img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:40% 50%}
+.forloeb-billede figcaption{position:absolute;left:0;right:0;bottom:0;padding:40px 18px 12px;font-size:.8rem;font-style:italic;color:rgba(255,255,255,.85);background:linear-gradient(0deg,rgba(0,0,0,.55),transparent)}
+.forloeb-tekst{padding:36px 38px 34px}
+.maerkater{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.maerkat{font-size:.8rem;font-weight:600;padding:4px 11px;border-radius:999px;background:var(--blaa-lys);color:var(--blaa-moerk)}
+.maerkat.okker{background:var(--okker-lys);color:#7a5210}
+.forloeb h3{font-size:clamp(1.8rem,3vw,2.3rem)}
+.forloeb .undertitel{font-family:var(--skrift-titel);font-style:italic;font-weight:400;font-size:1.12rem;color:var(--blaek-bloed);margin:4px 0 16px}
+.forloeb p.beskrivelse{margin-bottom:22px}
+.afsnit{list-style:none;margin:0 0 26px;padding:0;columns:2;column-gap:18px;font-size:.93rem}
+.afsnit li{break-inside:avoid}
+.afsnit a{display:flex;gap:8px;padding:5px 0;color:var(--blaek);text-decoration:none;border-bottom:1px dotted var(--streg)}
+.afsnit a:hover{color:var(--blaa)}
+.afsnit .nr{font-variant-numeric:tabular-nums;color:var(--okker);font-weight:700;min-width:2.1em}
+.forloeb .knapper{margin-top:0}
+.paa-vej{margin-top:22px;display:flex;align-items:center;gap:16px;padding:20px 24px;border:2px dashed var(--streg);border-radius:16px;color:var(--blaek-bloed)}
+.paa-vej svg{width:28px;height:28px;flex:none;color:var(--okker)}
+
+/* ---------- Tidslinje ---------- */
+#tidslinje{background:var(--papir-moerk)}
+.perioder{position:relative;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;padding-bottom:22px}
+.perioder::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:6px;border-radius:999px;background:linear-gradient(90deg,#c9a256,#c4873f,#b5683a,#9c5040,#7c4a62,#58508a,#33579d,#1f4fa3)}
+.periode-knap{position:relative;text-align:left;padding:14px 12px 14px;border-radius:12px;border:1px solid transparent;background:transparent;cursor:pointer;transition:background .15s,border-color .15s,box-shadow .15s}
+.periode-knap::before{content:"";display:block;width:12px;height:12px;border-radius:50%;background:var(--farve);margin-bottom:10px;box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.periode-knap:hover{background:rgba(255,252,246,.7);border-color:var(--streg)}
+.periode-knap[aria-pressed="true"]{background:var(--kort);border-color:var(--farve);box-shadow:var(--skygge),inset 0 -4px 0 var(--farve)}
+.pk-navn{display:block;font-family:var(--skrift-titel);font-weight:600;font-size:1.05rem;line-height:1.15}
+.pk-aar{display:block;font-size:.8rem;color:var(--blaek-bloed);margin-top:3px;font-variant-numeric:tabular-nums}
+.tidslinje-note{font-size:.88rem;color:var(--blaek-bloed);margin-top:6px}
+
+.periode-panel{margin-top:18px;min-height:220px}
+.periode-tom{display:grid;place-items:center;min-height:220px;text-align:center;border:2px dashed var(--streg);border-radius:18px;color:var(--blaek-bloed);padding:24px}
+.periode-tom strong{display:block;font-family:var(--skrift-titel);font-size:1.4rem;color:var(--blaek);margin-bottom:6px;font-weight:600}
+.periode{background:var(--kort);border:1px solid var(--streg);border-top:6px solid var(--farve);border-radius:18px;box-shadow:var(--skygge);padding:32px 36px 26px;animation:ind .25s ease}
+@keyframes ind{from{transform:translateY(6px)}to{transform:none}}
+.periode-hoved{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 24px;align-items:start}
+.periode-aar{font-size:.9rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--farve);filter:brightness(.8)}
+.periode h3{font-size:clamp(1.7rem,3vw,2.3rem);margin:4px 0 10px}
+.periode-tekst{max-width:46rem;font-size:1.08rem}
+.periode-pile{display:flex;gap:8px}
+.pil-knap{width:42px;height:42px;border-radius:50%;border:1px solid var(--streg);background:var(--papir);cursor:pointer;display:grid;place-items:center;color:var(--blaek)}
+.pil-knap:hover:not(:disabled){border-color:var(--blaek-bloed);background:#fff}
+.pil-knap:disabled{opacity:.35;cursor:default}
+.pil-knap svg{width:20px;height:20px}
+.periode-lister{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:26px}
+.periode-lister h4{font-family:var(--skrift-tekst);font-size:.82rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blaek-bloed);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.periode-lister h4 svg{width:18px;height:18px}
+.haendelser{list-style:none;margin:0;padding:0;border-left:2px solid var(--streg)}
+.haendelser li{position:relative;padding:6px 0 10px 18px}
+.haendelser li::before{content:"";position:absolute;left:-7px;top:13px;width:12px;height:12px;border-radius:50%;background:var(--kort);border:2px solid var(--farve)}
+.aarstal{display:block;font-weight:700;font-size:.9rem;font-variant-numeric:tabular-nums;color:var(--blaek)}
+.periode-fod{margin-top:22px;padding-top:18px;border-top:1px solid var(--streg);display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:.93rem}
+.periode-fod > span{color:var(--blaek-bloed);margin-right:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--blaa-lys);color:var(--blaa-moerk);text-decoration:none;font-weight:600;font-size:.88rem}
+.chip:hover{background:#d3def3}
+
+/* Kronologi-øvelse */
+.kronologi{margin-top:40px;background:var(--kort);border:1px solid var(--streg);border-radius:18px;box-shadow:var(--skygge);padding:30px 28px 28px;scroll-margin-top:24px}
+.opgave-top{text-align:center;max-width:40rem;margin:0 auto 18px}
+.opgave-top h3{font-size:1.6rem;margin:8px 0 6px}
+.opgave-top p{color:var(--blaek-bloed)}
+.tilbagemelding{text-align:center;min-height:1.6em;font-weight:600;margin:0 auto 14px;max-width:44rem}
+.tilbagemelding.godt{color:var(--groen)}
+.tilbagemelding.delvis{color:#8a5d14}
+.kort-raekke{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.begivenhed{position:relative;width:100%;height:100%;min-height:118px;text-align:left;padding:38px 14px 14px;border:2px solid var(--streg);border-radius:14px;background:var(--papir);cursor:pointer;line-height:1.35;font-size:.98rem;transition:border-color .15s,background .15s,transform .15s}
+.begivenhed:hover:not(:disabled){border-color:var(--blaa);transform:translateY(-2px)}
+.begivenhed:disabled{cursor:default}
+.begivenhed .plads{position:absolute;top:10px;left:12px;width:24px;height:24px;border-radius:50%;border:2px dashed var(--streg);display:grid;place-items:center;font-size:.85rem;font-weight:700}
+.begivenhed.valgt{border-color:var(--blaa);background:var(--blaa-lys)}
+.begivenhed.valgt .plads{border:none;background:var(--blaa);color:#fff}
+.begivenhed .facit{display:none;margin-top:8px;font-size:.85rem;font-weight:700}
+.begivenhed.rigtig{border-color:var(--groen);background:var(--groen-lys)}
+.begivenhed.rigtig .plads,.begivenhed.forkert .plads{border:none;color:#fff}
+.begivenhed.rigtig .plads{background:var(--groen)}
+.begivenhed.forkert{border-color:var(--roed);background:var(--roed-lys)}
+.begivenhed.forkert .plads{background:var(--roed)}
+.begivenhed.rigtig .facit,.begivenhed.forkert .facit{display:block}
+.rigtig .facit{color:var(--groen)}
+.forkert .facit{color:var(--roed)}
+.opgave-knapper{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:20px}
+
+/* ---------- Værktøjskassen ---------- */
+.vt-gitter{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.vt-kort{width:100%;height:100%;text-align:left;display:flex;flex-direction:column;gap:10px;padding:22px 18px 20px;background:var(--kort);border:1px solid var(--streg);border-radius:16px;cursor:pointer;box-shadow:0 1px 2px rgba(27,33,48,.05);transition:transform .15s,box-shadow .15s,border-color .15s}
+.vt-kort:hover{transform:translateY(-2px);box-shadow:var(--skygge)}
+.vt-kort[aria-expanded="true"]{border-color:var(--blaa);box-shadow:var(--skygge),inset 0 -4px 0 var(--blaa)}
+.vt-kort .ikon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blaa-lys);color:var(--blaa)}
+.vt-kort .ikon svg{width:24px;height:24px}
+.vt-kort strong{font-family:var(--skrift-titel);font-weight:600;font-size:1.15rem;line-height:1.15}
+.vt-kort span.linje{font-size:.9rem;color:var(--blaek-bloed);line-height:1.4}
+.vt-panel{margin-top:18px;background:var(--kort);border:1px solid var(--streg);border-radius:18px;box-shadow:var(--skygge);padding:34px 38px 32px;scroll-margin-top:20px;animation:ind .25s ease}
+.vt-panel-hoved{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+.vt-panel h3{font-size:clamp(1.6rem,2.8vw,2.1rem)}
+.vt-panel .ingress{font-size:1.1rem;color:var(--blaek-bloed);max-width:46rem;margin-top:8px}
+.luk{flex:none;border:1px solid var(--streg);background:var(--papir);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:.9rem}
+.luk:hover{border-color:var(--blaek-bloed)}
+.trin{list-style:none;margin:8px 0 0;padding:0;counter-reset:trin;display:grid;gap:4px}
+.trin li{counter-increment:trin;position:relative;padding:14px 0 14px 58px;border-bottom:1px solid var(--papir-moerk)}
+.trin li:last-child{border-bottom:none}
+.trin li::before{content:counter(trin);position:absolute;left:0;top:12px;width:40px;height:40px;border-radius:50%;background:var(--blaa);color:#fff;display:grid;place-items:center;font-family:var(--skrift-titel);font-weight:600;font-size:1.15rem}
+.trin strong{display:block;font-size:1.05rem}
+.trin p{color:var(--blaek-bloed)}
+.tip{margin-top:20px;padding:16px 20px;border-radius:12px;background:var(--okker-lys);color:#4d3a12;font-size:.98rem}
+.tip strong{color:#3c2c0a}
+.to-spalter{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+
+.skala{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:18px 0 8px}
+.skala-trin{padding:10px 6px;border-radius:10px;text-align:center;font-size:.86rem;line-height:1.25;background:var(--papir);border:2px solid var(--streg);color:var(--blaek)}
+.skala-vis .skala-trin{border-color:transparent}
+.skala-vis .skala-trin:nth-child(1){background:#f3ddd5}
+.skala-vis .skala-trin:nth-child(2){background:#f5e6d6}
+.skala-vis .skala-trin:nth-child(3){background:#f4eedb}
+.skala-vis .skala-trin:nth-child(4){background:#e5efdd}
+.skala-vis .skala-trin:nth-child(5){background:#d9eadf}
+.skala-vis .skala-trin:nth-child(6){background:#cde3d6}
+.skala-pil{display:flex;justify-content:space-between;font-size:.8rem;color:var(--blaek-bloed)}
+button.skala-trin{cursor:pointer}
+button.skala-trin:hover:not(:disabled){border-color:var(--blaa)}
+button.skala-trin[aria-checked="true"]{background:var(--blaa);border-color:var(--blaa);color:#fff}
+button.skala-trin:disabled{cursor:default}
+.saetning{margin-top:16px;padding:18px 20px;border-left:4px solid var(--blaa);background:var(--blaa-lys);border-radius:0 12px 12px 0}
+.saetning p+p{margin-top:6px}
+.oevelse{margin-top:28px;padding:26px 24px;border-radius:16px;background:var(--papir);border:1px solid var(--streg)}
+.oevelse .opgave-top{margin-bottom:10px}
+.oevelse .opgave-top h4{font-size:1.4rem;margin:8px 0 6px}
+.spm{margin-top:18px}
+.spm p.spm-tekst{font-weight:600}
+.spm .svar{margin-top:8px;padding:12px 16px;border-radius:10px;font-size:.96rem;display:none}
+.spm .svar.vis{display:block}
+.svar.godt{background:var(--groen-lys);color:#1d4f31}
+.svar.naesten{background:var(--okker-lys);color:#4d3a12}
+.svar.galt{background:var(--roed-lys);color:#6e2a19}
+
+.niveauer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:6px}
+.niveau{position:relative;padding:22px 20px 20px;border-radius:14px;background:var(--papir);border:1px solid var(--streg)}
+.niveau:nth-child(2){margin-top:18px}
+.niveau:nth-child(3){margin-top:36px}
+.niveau .trinnr{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--okker)}
+.niveau h4{font-size:1.45rem;margin:4px 0 6px}
+.niveau .udsagn{font-weight:600;margin-bottom:8px}
+.niveau .ord{font-size:.9rem;color:var(--blaek-bloed);margin-bottom:12px}
+.niveau .eksempel{font-size:.95rem;padding:10px 12px;border-radius:10px;background:var(--kort);border:1px dashed var(--streg);font-style:italic}
+
+.aarsager{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:6px}
+.aarsag{padding:18px 16px;border-radius:14px;background:var(--papir);border:1px solid var(--streg);border-top:5px solid var(--farve)}
+.aarsag h4{font-size:1.2rem;margin-bottom:6px}
+.aarsag p{font-size:.95rem;color:var(--blaek-bloed)}
+.aarsag .eks{margin-top:10px;font-size:.92rem;color:var(--blaek);font-weight:600}
+
+.brug{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.brug li{padding:18px 18px 16px;border-radius:14px;background:var(--papir);border:1px solid var(--streg)}
+.brug h4{font-size:1.15rem;margin-bottom:4px}
+.brug p{font-size:.95rem;color:var(--blaek-bloed)}
+.brug p.eks{margin-top:8px;color:var(--blaek);font-size:.92rem}
+.brug p.eks::before{content:"Eksempel: ";font-weight:700}
+
+/* ---------- Faggruppen ---------- */
+#faggruppen{background:var(--kort);border-top:1px solid var(--streg)}
+.fag-gitter{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:start}
+.fag-tekst p{margin-bottom:14px;font-size:1.08rem}
+.fag-tekst p.kontakt{margin-top:22px;padding:18px 20px;border-radius:12px;background:var(--papir);border:1px solid var(--streg);font-size:1rem}
+.bygget{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bygget li{padding:20px 18px;border-radius:14px;background:var(--papir);border:1px solid var(--streg)}
+.bygget .ikon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--okker-lys);color:#8a5d14;margin-bottom:10px}
+.bygget .ikon svg{width:22px;height:22px}
+.bygget h3{font-size:1.15rem;margin-bottom:4px}
+.bygget p{font-size:.95rem;color:var(--blaek-bloed)}
+
+/* ---------- Fod ---------- */
+footer.fod{background:var(--nat);color:rgba(246,241,231,.78);padding:46px 0 52px;font-size:.92rem}
+.fod .indre{display:grid;grid-template-columns:auto 1fr;gap:20px 48px;align-items:start}
+.fod .maerke{color:var(--papir);font-size:1.3rem}
+.fod p+p{margin-top:8px}
+.fod a{color:#e7c27a}
+
+/* ---------- Mindre skærme ---------- */
+@media (max-width:1080px){
+  .vt-gitter{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .aarsager{grid-template-columns:1fr 1fr}
+}
+@media (max-width:900px){
+  .perioder{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .perioder::after{display:none}
+  .periode-knap{background:rgba(255,252,246,.5);border-color:var(--streg)}
+  .forloeb{grid-template-columns:1fr}
+  .forloeb-billede{min-height:240px}
+  .fag-gitter{grid-template-columns:1fr;gap:32px}
+  .genveje ul{grid-template-columns:1fr}
+  .genveje{margin-top:-60px}
+  .kort-raekke{grid-template-columns:1fr 1fr}
+  .niveauer{grid-template-columns:1fr}
+  .niveau:nth-child(2),.niveau:nth-child(3){margin-top:0}
+}
+@media (max-width:700px){
+  .indre{padding:0 16px}
+  .top .indre{flex-direction:column;align-items:flex-start;gap:6px;padding-top:16px}
+  .top nav ul{gap:0;margin-left:-12px;flex-wrap:wrap}
+  .top nav a{padding:6px 12px;font-size:.92rem}
+  .helt .indre{padding-top:132px;padding-bottom:110px}
+  .helt::after{background:linear-gradient(0deg,rgba(18,26,46,.8) 0%,rgba(18,26,46,.0) 30%),rgba(18,26,46,.78)}
+  .billedtekst{display:none}
+  section.blok{padding:64px 0}
+  .forloeb-tekst{padding:26px 20px 24px}
+  .afsnit{columns:1}
+  .periode,.vt-panel{padding:24px 18px 22px}
+  .periode-hoved{grid-template-columns:1fr}
+  .periode-pile{order:-1;justify-content:flex-end;margin-bottom:-38px}
+  .periode-lister{grid-template-columns:1fr;gap:18px}
+  .vt-gitter{grid-template-columns:1fr 1fr}
+  .vt-gitter li:last-child{grid-column:1 / -1}
+  .to-spalter{grid-template-columns:1fr}
+  .skala{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .skala-pil{display:none}
+  .aarsager{grid-template-columns:1fr}
+  .bygget{grid-template-columns:1fr}
+  .kronologi{padding:24px 16px}
+  .oevelse{padding:20px 14px}
+  .fod .indre{grid-template-columns:1fr}
+  .paa-vej{padding:16px}
+}
+@media (max-width:460px){
+  .perioder{grid-template-columns:1fr 1fr}
+  .kort-raekke{grid-template-columns:1fr}
+  .begivenhed{min-height:0;padding:12px 14px 12px 50px}
+  .begivenhed .plads{top:50%;transform:translateY(-50%)}
+  .begivenhed.rigtig .plads,.begivenhed.forkert .plads{top:14px;transform:none}
+  .genvej{padding:18px 16px}
+}
 </style>
 </head>
 <body>
+
+<!-- Ikoner, der bruges flere steder -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-bog" viewBox="0 0 24 24"><path d="M12 6.5C9.8 5 7 4.6 3.5 5v13c3.5-.4 6.3 0 8.5 1.5 2.2-1.5 5-1.9 8.5-1.5V5C17 4.6 14.2 5 12 6.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 6.5v13" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-tid" viewBox="0 0 24 24"><path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="6" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="12" r="2.2" fill="currentColor"/><path d="M6 8V5M12 19v-3M18 8V5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-lup" viewBox="0 0 24 24"><path d="M5 3.5h8l4 4v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 3.5v17h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 8h4M8 11.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="16" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M18.7 18.7l2.3 2.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-maaler" viewBox="0 0 24 24"><path d="M3.5 16a8.5 8.5 0 0 1 17 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 16l4.2-5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.6" fill="currentColor"/><path d="M6.2 11.2l1 .8M12 7.5v1.3M17.8 11.2l-1 .8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-trappe" viewBox="0 0 24 24"><path d="M3.5 20h5v-5h5v-5h5V5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M3.5 20H20.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-kaede" viewBox="0 0 24 24"><rect x="3" y="9" width="5" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="16" y="9" width="5" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 12h6.5M12.5 9.5 15 12l-2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-soejle" viewBox="0 0 24 24"><path d="M4 7.5 12 3.5l8 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 10v7.5M10 10v7.5M14 10v7.5M18 10v7.5M4 20.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-pil" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pil-v" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-globus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 12h17M12 3.5c2.6 2.6 3.6 5.4 3.6 8.5s-1 5.9-3.6 8.5c-2.6-2.6-3.6-5.4-3.6-8.5s1-5.9 3.6-8.5z" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4.5h14v9H5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 4.5v9M5 9h14" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-tekst" viewBox="0 0 24 24"><path d="M5 5h14M5 9.5h14M5 14h9M5 18.5h11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-spm" viewBox="0 0 24 24"><path d="M4 5.5h16v10H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10.2 8.6a1.9 1.9 0 1 1 2.6 1.8c-.6.3-.8.6-.8 1.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="13.4" r=".9" fill="currentColor"/></symbol>
+    <symbol id="i-ord" viewBox="0 0 24 24"><path d="M4.5 18 8.5 6l4 12M6 14h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.5 10h5M14.5 14h5M14.5 18h3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-tavle" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v3.5M8 20.5h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 12l3-3 2.5 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mobil" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 17.5h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="indre">
+    <a class="maerke" href="./">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="8" fill="#1f4fa3"/><path d="M17 10.8c-3-2-6.7-2.6-10.6-2.1v14.9c3.9-.5 7.6.1 10.6 2.1 3-2 6.7-2.6 10.6-2.1V8.7c-3.9-.5-7.6.1-10.6 2.1z" fill="#f6f1e7"/><path d="M17 10.8v14.9" stroke="#1f4fa3" stroke-width="1.6"/><path d="M9.3 13.2c1.9-.1 3.7.2 5.2.9M9.3 16.6c1.9-.1 3.7.2 5.2.9M19.5 14.1c1.5-.7 3.3-1 5.2-.9" stroke="#c9a256" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+      Historiebog
+    </a>
+    <nav aria-label="Hovedmenu">
+      <ul>
+        <li><a href="#forloeb">Forløb</a></li>
+        <li><a href="#tidslinje">Tidslinje</a></li>
+        <li><a href="#vaerktoejer">Værktøjer</a></li>
+        <li><a href="#faggruppen">Til lærerne</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
 <main>
-<h1>Historiebog</h1>
-<p>Historie på Middelfart Gymnasium</p>
-<a href="portugal/">Portugals historie</a>
+  <section class="helt" aria-labelledby="titel">
+    <img src="forside/verdenskort-1100.jpg"
+         srcset="forside/verdenskort-1100.jpg 1100w, forside/verdenskort-1920.jpg 1920w"
+         sizes="100vw" alt="" fetchpriority="high">
+    <div class="indre">
+      <p class="overlinje">Historie på Middelfart Gymnasium</p>
+      <h1 id="titel">Hvorfor ser verden ud, som den gør?</h1>
+      <p class="ingress">Svaret ligger i fortiden. På Historiebog finder du historiefaggruppens forløb, en tidslinje fra oldtid til i dag og værktøjer til lektier, opgaver og eksamen.</p>
+      <div class="knapper">
+        <a class="knap knap-lys" href="#forloeb">Se forløbene <svg aria-hidden="true"><use href="#i-pil"/></svg></a>
+        <a class="knap knap-ramme" href="#kronologi">Træn kronologi</a>
+      </div>
+    </div>
+    <p class="billedtekst">Verdenskort efter Ptolemæus, trykt i Ulm 1482</p>
+  </section>
+
+  <div class="genveje">
+    <div class="indre">
+      <ul>
+        <li><a class="genvej" href="#forloeb">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-bog"/></svg></span>
+          <span><h3>Læs et forløb</h3><p>Portugals historie i 10 afsnit med fagord og slides.</p></span>
+          <svg class="pil" width="20" height="20" aria-hidden="true"><use href="#i-pil"/></svg>
+        </a></li>
+        <li><a class="genvej" href="#tidslinje">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-tid"/></svg></span>
+          <span><h3>Find rundt i tiden</h3><p>Otte perioder fra oldtid til i dag, i verden og i Danmark.</p></span>
+          <svg class="pil" width="20" height="20" aria-hidden="true"><use href="#i-pil"/></svg>
+        </a></li>
+        <li><a class="genvej" href="#kildeanalyse">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-lup"/></svg></span>
+          <span><h3>Analysér en kilde</h3><p>Syv trin fra spørgsmål til afrunding.</p></span>
+          <svg class="pil" width="20" height="20" aria-hidden="true"><use href="#i-pil"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================== FORLØB ===================== -->
+  <section class="blok" id="forloeb" aria-labelledby="forloeb-titel">
+    <div class="indre">
+      <div class="blok-hoved">
+        <p class="overlinje">Forløb</p>
+        <h2 id="forloeb-titel">Historie, du kan læse overalt</h2>
+        <p>Hvert forløb er en lille bog på nettet med tekst, billeder, kort, kilder, fagord og slides. Den kan læses på telefon, tablet og computer.</p>
+      </div>
+
+      <article class="forloeb">
+        <figure class="forloeb-billede" style="margin:0">
+          <img src="forside/karakker-960.jpg" alt="Maleri af portugisiske handelsskibe med store sejl ud for en klippekyst." loading="lazy">
+          <figcaption>Portugisiske karakker ud for en klippekyst, maleri fra ca. 1540</figcaption>
+        </figure>
+        <div class="forloeb-tekst">
+          <div class="maerkater">
+            <span class="maerkat">Kapitel 1</span>
+            <span class="maerkat">10 afsnit</span>
+            <span class="maerkat okker">ca. 3000 f.v.t. til i dag</span>
+          </div>
+          <h3>Portugals historie</h3>
+          <p class="undertitel">Portugal i verden gennem tusindvis af år</p>
+          <p class="beskrivelse">Portugal er et lille land, men portugiserne har sat spor i næsten hele verden. Forløbet går fra romere og arabere over opdagelsesrejser og slavehandel til Salazars diktatur og nellikerevolutionen i 1974.</p>
+          <ol class="afsnit">
+            <li><a href="portugal/kapitler/1-1-foer-portugal-blev-portugal.html"><span class="nr">1.1</span>Før Portugal blev Portugal</a></li>
+            <li><a href="portugal/kapitler/1-2-araberne-og-reconquista.html"><span class="nr">1.2</span>Araberne og reconquista</a></li>
+            <li><a href="portugal/kapitler/1-3-kongeriget-portugal.html"><span class="nr">1.3</span>Kongeriget Portugal</a></li>
+            <li><a href="portugal/kapitler/1-4-opdagelsesrejser-og-slaveri.html"><span class="nr">1.4</span>Opdagelsesrejser og slaveri</a></li>
+            <li><a href="portugal/kapitler/1-5-vasco-da-gama-og-asien.html"><span class="nr">1.5</span>Vasco da Gama og Asien</a></li>
+            <li><a href="portugal/kapitler/1-6-fra-stormagt-til-udkant.html"><span class="nr">1.6</span>Fra stormagt til udkant</a></li>
+            <li><a href="portugal/kapitler/1-7-jordskaelvet-og-napoleon.html"><span class="nr">1.7</span>Jordskælvet og Napoleon</a></li>
+            <li><a href="portugal/kapitler/1-8-et-stille-diktatur.html"><span class="nr">1.8</span>Et stille diktatur</a></li>
+            <li><a href="portugal/kapitler/1-9-estado-novo-og-krigen.html"><span class="nr">1.9</span>Estado Novo og krigen</a></li>
+            <li><a href="portugal/kapitler/1-10-nellikerevolutionen-og-i-dag.html"><span class="nr">1.10</span>Nellikerevolutionen og i dag</a></li>
+          </ol>
+          <div class="knapper">
+            <a class="knap knap-blaa" href="portugal/">Begynd at læse <svg aria-hidden="true"><use href="#i-pil"/></svg></a>
+            <a class="knap knap-stille" href="portugal/fagord/kapitel-1.html">Fagord</a>
+            <a class="knap knap-stille" href="portugal/slides/kapitel-1.html">Slides</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="paa-vej">
+        <svg aria-hidden="true"><use href="#i-plus"/></svg>
+        <p><strong>Flere forløb er på vej.</strong> Nye forløb kommer på Historiebog, efterhånden som de bliver færdige.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TIDSLINJE ===================== -->
+  <section class="blok" id="tidslinje" aria-labelledby="tidslinje-titel">
+    <div class="indre">
+      <div class="blok-hoved">
+        <p class="overlinje">Tidslinje</p>
+        <h2 id="tidslinje-titel">Fra oldtid til i dag</h2>
+        <p>Historien er delt op i perioder. Vælg en periode og se, hvad der skete i verden og i Danmark.</p>
+      </div>
+
+      <div class="perioder" id="perioder" role="group" aria-label="Perioder"></div>
+      <p class="tidslinje-note">Årstallene er cirka. Perioderne glider over i hinanden, og i Danmark kommer skiftene ofte senere end i Sydeuropa.</p>
+
+      <div class="periode-panel" id="periode-panel" aria-live="polite">
+        <div class="periode-tom"><div><strong>Vælg en periode</strong>Tryk på en af de otte perioder ovenfor.</div></div>
+      </div>
+
+      <div class="kronologi" id="kronologi">
+        <div class="opgave-top">
+          <p class="overlinje">Øvelse</p>
+          <h3>Træn kronologi</h3>
+          <p id="kronologi-opgave">Hvilken begivenhed kom først? Tryk på de fire begivenheder i den rækkefølge, de skete. Den ældste først.</p>
+        </div>
+        <p class="tilbagemelding" id="kronologi-svar" aria-live="polite"></p>
+        <ol class="kort-raekke" id="kronologi-kort" aria-describedby="kronologi-opgave"></ol>
+        <div class="opgave-knapper">
+          <button class="knap knap-blaa" type="button" id="kronologi-indsend" disabled>Indsend svar</button>
+          <button class="knap knap-stille" type="button" id="kronologi-ryd">Start forfra</button>
+          <button class="knap knap-blaa" type="button" id="kronologi-ny" hidden>Fire nye begivenheder</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== VÆRKTØJSKASSEN ===================== -->
+  <section class="blok" id="vaerktoejer" aria-labelledby="vaerktoejer-titel">
+    <div class="indre">
+      <div class="blok-hoved">
+        <p class="overlinje">Værktøjskassen</p>
+        <h2 id="vaerktoejer-titel">Redskaber til lektier, opgaver og eksamen</h2>
+        <p>Fem redskaber, som du kan bruge i alle forløb. Vælg et redskab for at åbne det.</p>
+      </div>
+
+      <ul class="vt-gitter">
+        <li><button class="vt-kort" type="button" aria-expanded="false" aria-controls="kildeanalyse">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-lup"/></svg></span>
+          <strong>Kildeanalyse</strong>
+          <span class="linje">Syv trin fra spørgsmål til afrunding.</span>
+        </button></li>
+        <li><button class="vt-kort" type="button" aria-expanded="false" aria-controls="troevaerdighed">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-maaler"/></svg></span>
+          <strong>Troværdighed i grader</strong>
+          <span class="linje">Ikke ja eller nej, men en grad. Prøv selv.</span>
+        </button></li>
+        <li><button class="vt-kort" type="button" aria-expanded="false" aria-controls="spoergsmaal">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-trappe"/></svg></span>
+          <strong>Gode spørgsmål</strong>
+          <span class="linje">Redegør, analysér og diskutér: tre niveauer.</span>
+        </button></li>
+        <li><button class="vt-kort" type="button" aria-expanded="false" aria-controls="aarsager">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-kaede"/></svg></span>
+          <strong>Årsager</strong>
+          <span class="linje">Anledning, kort og lang sigt, strukturer og aktører.</span>
+        </button></li>
+        <li><button class="vt-kort" type="button" aria-expanded="false" aria-controls="historiebrug">
+          <span class="ikon"><svg aria-hidden="true"><use href="#i-soejle"/></svg></span>
+          <strong>Historiebrug</strong>
+          <span class="linje">Syv måder, fortiden bliver brugt på i dag.</span>
+        </button></li>
+      </ul>
+
+      <!-- Kildeanalyse -->
+      <section class="vt-panel" id="kildeanalyse" hidden aria-labelledby="kildeanalyse-titel">
+        <div class="vt-panel-hoved">
+          <div>
+            <h3 id="kildeanalyse-titel">Kildeanalyse trin for trin</h3>
+            <p class="ingress">En kilde er alt, der er efterladt fra fortiden: en tale, et brev, en lov, en plakat, et foto eller en tabel. Sådan analyserer du en kilde.</p>
+          </div>
+          <button class="luk" type="button">Luk</button>
+        </div>
+        <ol class="trin">
+          <li><strong>Start med spørgsmålet</strong><p>Skriv det spørgsmål, kilden skal hjælpe dig med at besvare. Det er spørgsmålet, der afgør, om kilden er brugbar. Den samme kilde kan være god til ét spørgsmål og dårlig til et andet.</p></li>
+          <li><strong>Find kildens oplysninger</strong><p>Hvem er afsenderen? Hvilken slags kilde er det: en tale, et brev, en lov, en dagbog? Hvem er modtageren? Hvornår er kilden lavet?</p></li>
+          <li><strong>Redegør for hovedpunkterne</strong><p>Fortæl kort med dine egne ord, hvad kilden siger. Her bruger du endnu ikke citater.</p></li>
+          <li><strong>Analysér med citater</strong><p>Vælg citater, der svarer på dit spørgsmål. Sig først afsenderens holdning, så citatet. Forklar citatet med dine egne ord, og peg på de interessante ord: værdiladede ord, tillægsord og stærke ord.</p></li>
+          <li><strong>Spørg til afsenderen</strong><p>Hvor har afsenderen sin viden fra? Hvad vil afsenderen opnå? En huskeregel er PAM: penge, anerkendelse og magt. Brug det, du ved om tiden, kilden er fra.</p></li>
+          <li><strong>Vurdér troværdigheden</strong><p>Troværdighed er en grad, ikke et ja eller nej. Brug skalaen i redskabet Troværdighed i grader.</p></li>
+          <li><strong>Rund af</strong><p>Gentag spørgsmålet og dine vigtigste pointer. En afrunding har ingen ny viden.</p></li>
+        </ol>
+        <p class="tip"><strong>Sig kun det, der er relevant.</strong> At en kilde er oversat eller forkortet, skal du kun nævne, hvis det ændrer svaret på dit spørgsmål.</p>
+      </section>
+
+      <!-- Troværdighed -->
+      <section class="vt-panel" id="troevaerdighed" hidden aria-labelledby="troevaerdighed-titel">
+        <div class="vt-panel-hoved">
+          <div>
+            <h3 id="troevaerdighed-titel">Troværdighed i grader</h3>
+            <p class="ingress">En kilde er ikke bare troværdig eller utroværdig. Troværdighed er en grad, og graden afhænger af dit spørgsmål. Du kan først vurdere den, når du har analyseret kilden.</p>
+          </div>
+          <button class="luk" type="button">Luk</button>
+        </div>
+        <div class="skala skala-vis" aria-label="Skala for troværdighed">
+          <span class="skala-trin">i meget ringe grad</span>
+          <span class="skala-trin">i ringe grad</span>
+          <span class="skala-trin">i nogen grad</span>
+          <span class="skala-trin">i højere grad</span>
+          <span class="skala-trin">i høj grad</span>
+          <span class="skala-trin">i meget høj grad</span>
+        </div>
+        <div class="skala-pil"><span>← mindre troværdig</span><span>mere troværdig →</span></div>
+        <div class="saetning">
+          <p><strong>Byg din vurdering i tre led:</strong></p>
+          <p>1. Kilden er på baggrund af analysen <em>i høj grad</em> troværdig, fordi …</p>
+          <p>2. Det understøttes også af …</p>
+          <p>3. Samtidig er der et forbehold, fordi …</p>
+        </div>
+
+        <div class="oevelse" id="troevaerdighed-oevelse">
+          <div class="opgave-top">
+            <p class="overlinje">Prøv selv</p>
+            <h4>Samme plakat, to spørgsmål</h4>
+            <p>En propagandaplakat fra Salazars diktatur i Portugal viser et trygt og lykkeligt land med Gud, fædreland og familie. Hvor troværdig er plakaten til hvert af de to spørgsmål? Vælg en grad ved begge, og tryk Indsend svar.</p>
+          </div>
+          <div class="spm" data-spm="1">
+            <p class="spm-tekst">Spørgsmål 1: Hvordan ville Salazars regime have, at portugiserne så deres land?</p>
+            <div class="skala" role="radiogroup" aria-label="Troværdighed til spørgsmål 1"></div>
+            <p class="svar"></p>
+          </div>
+          <div class="spm" data-spm="2">
+            <p class="spm-tekst">Spørgsmål 2: Hvordan levede almindelige portugisere under diktaturet?</p>
+            <div class="skala" role="radiogroup" aria-label="Troværdighed til spørgsmål 2"></div>
+            <p class="svar"></p>
+          </div>
+          <div class="opgave-knapper">
+            <button class="knap knap-blaa" type="button" id="troev-indsend" disabled>Indsend svar</button>
+            <button class="knap knap-stille" type="button" id="troev-igen" hidden>Prøv igen</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gode spørgsmål -->
+      <section class="vt-panel" id="spoergsmaal" hidden aria-labelledby="spoergsmaal-titel">
+        <div class="vt-panel-hoved">
+          <div>
+            <h3 id="spoergsmaal-titel">Gode spørgsmål på tre niveauer</h3>
+            <p class="ingress">I historie arbejder man med spørgsmål på tre niveauer. En god problemformulering til en opgave har et spørgsmål på hvert niveau, og spørgsmålene bygger oven på hinanden.</p>
+          </div>
+          <button class="luk" type="button">Luk</button>
+        </div>
+        <div class="niveauer">
+          <div class="niveau">
+            <p class="trinnr">Niveau 1</p>
+            <h4>Redegør</h4>
+            <p class="udsagn">Hvad skete der? Hvem, hvad, hvor og hvornår?</p>
+            <p class="ord">Andre ord: beskriv, gør rede for, giv et overblik over.</p>
+            <p class="eksempel">Redegør for Vasco da Gamas rejse til Indien 1497-1499.</p>
+          </div>
+          <div class="niveau">
+            <p class="trinnr">Niveau 2</p>
+            <h4>Analysér</h4>
+            <p class="udsagn">Hvordan og hvorfor? Find sammenhænge, årsager og holdninger.</p>
+            <p class="ord">Andre ord: undersøg, forklar, sammenlign.</p>
+            <p class="eksempel">Analysér, hvordan Salazars regime fremstillede Portugals kolonier.</p>
+          </div>
+          <div class="niveau">
+            <p class="trinnr">Niveau 3</p>
+            <h4>Diskutér og vurdér</h4>
+            <p class="udsagn">I hvilken grad? Afvej synspunkter, og tag selv stilling.</p>
+            <p class="ord">Andre ord: vurdér, tag stilling til, perspektivér.</p>
+            <p class="eksempel">Diskutér, i hvilken grad kolonikrigene var årsagen til nellikerevolutionen i 1974.</p>
+          </div>
+        </div>
+        <p class="tip"><strong>Tjek dit spørgsmål.</strong> Kan det besvares med ét ord eller et årstal, er det et redegørende spørgsmål. Begynder det med "hvorfor" eller "i hvilken grad", er du på vej op ad trappen.</p>
+      </section>
+
+      <!-- Årsager -->
+      <section class="vt-panel" id="aarsager" hidden aria-labelledby="aarsager-titel">
+        <div class="vt-panel-hoved">
+          <div>
+            <h3 id="aarsager-titel">Årsager og forklaringer</h3>
+            <p class="ingress">Store begivenheder har næsten aldrig kun én årsag. Når du forklarer, hvorfor noget skete, kan du skelne mellem fire slags forklaringer. Eksemplet er udbruddet af første verdenskrig i 1914.</p>
+          </div>
+          <button class="luk" type="button">Luk</button>
+        </div>
+        <div class="aarsager">
+          <div class="aarsag" style="--farve:#c9a256">
+            <h4>Anledningen</h4>
+            <p>Den gnist, der satte det hele i gang. Uden de andre årsager var der ikke kommet en brand.</p>
+            <p class="eks">Skuddene i Sarajevo 28. juni 1914, hvor Østrig-Ungarns tronfølger blev dræbt.</p>
+          </div>
+          <div class="aarsag" style="--farve:#b5683a">
+            <h4>Kort sigt</h4>
+            <p>Det, der skete i ugerne og månederne lige før.</p>
+            <p class="eks">Østrig-Ungarns krav til Serbien og stormagternes mobilisering i juli 1914.</p>
+          </div>
+          <div class="aarsag" style="--farve:#7c4a62">
+            <h4>Lang sigt</h4>
+            <p>Udviklinger over mange år, som gjorde krigen mulig.</p>
+            <p class="eks">Alliancerne, oprustningen, kampen om kolonier og nationalismen.</p>
+          </div>
+          <div class="aarsag" style="--farve:#1f4fa3">
+            <h4>Strukturer og aktører</h4>
+            <p>Strukturer er store forhold som økonomi, geografi og ideer. Aktører er mennesker, der træffer valg.</p>
+            <p class="eks">Var krigen uundgåelig, eller kunne lederne have valgt anderledes?</p>
+          </div>
+        </div>
+        <p class="tip"><strong>Spørg også om historiesyn.</strong> Var det ideer, der drev udviklingen (et idealistisk historiesyn)? Eller var det økonomi, teknik og natur (et materialistisk historiesyn)? De fleste gode forklaringer bruger begge dele.</p>
+      </section>
+
+      <!-- Historiebrug -->
+      <section class="vt-panel" id="historiebrug" hidden aria-labelledby="historiebrug-titel">
+        <div class="vt-panel-hoved">
+          <div>
+            <h3 id="historiebrug-titel">Historiebrug</h3>
+            <p class="ingress">Fortiden bliver brugt hele tiden: i politik, reklamer, film, mindedage og familiehistorier. Den svenske historiker Klas-Göran Karlsson har delt historiebrug op i typer. Her er de syv, man oftest møder i gymnasiet.</p>
+          </div>
+          <button class="luk" type="button">Luk</button>
+        </div>
+        <ul class="brug">
+          <li><h4>Videnskabelig</h4><p>At undersøge fortiden med kilder og metode og finde ud af, hvad der faktisk skete.</p><p class="eks">En historiker læser politiets arkiver for at undersøge Salazars diktatur.</p></li>
+          <li><h4>Eksistentiel</h4><p>At bruge fortiden til at forstå, hvem man selv er, og hvor man hører til.</p><p class="eks">Slægtsforskning eller et besøg ved et mindesmærke for familiens døde.</p></li>
+          <li><h4>Moralsk</h4><p>At tage stilling til uret i fortiden og drage lære af den.</p><p class="eks">Et land giver en officiel undskyldning til ofrene for en forbrydelse begået i landets navn.</p></li>
+          <li><h4>Ideologisk</h4><p>At bruge fortiden til at retfærdiggøre en magt eller en politisk idé.</p><p class="eks">Salazars regime fejrede opdagelsesrejserne med en kæmpe udstilling i Lissabon i 1940 for at hylde imperiet.</p></li>
+          <li><h4>Ikke-brug</h4><p>At glemme eller tie dele af fortiden ihjel, fordi de er pinlige eller ubekvemme.</p><p class="eks">Et land fortæller stolt om sine opdagelsesrejser, men nævner ikke slavehandelen.</p></li>
+          <li><h4>Politisk-pædagogisk</h4><p>At bruge fortiden som argument i en aktuel politisk debat.</p><p class="eks">En politiker nævner 9. april 1940 i en debat om, hvor meget Danmark skal bruge på forsvaret.</p></li>
+          <li><h4>Kommerciel</h4><p>At bruge fortiden til at sælge en vare eller en oplevelse.</p><p class="eks">Lurmærket på dansk smør bygger på lurerne fra bronzealderen.</p></li>
+        </ul>
+        <p class="tip"><strong>Sådan bruger du typerne.</strong> Spørg: Hvem bruger fortiden her? Hvorfor? Hvad får de ud af det? Ofte passer flere typer på én gang.</p>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== FAGGRUPPEN ===================== -->
+  <section class="blok" id="faggruppen" aria-labelledby="faggruppen-titel">
+    <div class="indre fag-gitter">
+      <div class="fag-tekst">
+        <p class="overlinje">Faggruppen</p>
+        <div class="blok-hoved" style="margin-bottom:18px"><h2 id="faggruppen-titel">Til historielærerne</h2></div>
+        <p>Historiebog er historiefaggruppens fælles sted på nettet. Her samler vi forløb, som er lavet til undervisningen på Middelfart Gymnasium, så både kolleger og elever kan finde dem ét sted.</p>
+        <p>Forløbene kan bruges, som de er, eller som et udgangspunkt for jeres eget forløb. Tidslinjen og værktøjskassen passer til alle forløb.</p>
+        <p class="kontakt"><strong>Har du et forløb, der skal på Historiebog, eller har du fundet en fejl?</strong> Sig det til Niels Kræmmer.</p>
+      </div>
+      <div>
+        <h3 style="font-size:1.5rem;margin-bottom:16px">Sådan er et forløb bygget</h3>
+        <ul class="bygget">
+          <li><span class="ikon"><svg aria-hidden="true"><use href="#i-tekst"/></svg></span><h3>Tekst i afsnit</h3><p>Teksten er delt i afsnit, der kan læses som lektier, med billeder, kort og kilder.</p></li>
+          <li><span class="ikon"><svg aria-hidden="true"><use href="#i-spm"/></svg></span><h3>Fokusspørgsmål</h3><p>Sidst i hvert afsnit står brede spørgsmål, som eleverne kan kopiere over i deres noter.</p></li>
+          <li><span class="ikon"><svg aria-hidden="true"><use href="#i-ord"/></svg></span><h3>Fagord</h3><p>Fagordene står samlet med forklaringer, og teksten linker til dem.</p></li>
+          <li><span class="ikon"><svg aria-hidden="true"><use href="#i-tavle"/></svg></span><h3>Slides</h3><p>Hvert kapitel har slides, der kan vises på tavlen.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer class="fod">
+  <div class="indre">
+    <span class="maerke">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="8" fill="#1f4fa3"/><path d="M17 10.8c-3-2-6.7-2.6-10.6-2.1v14.9c3.9-.5 7.6.1 10.6 2.1 3-2 6.7-2.6 10.6-2.1V8.7c-3.9-.5-7.6.1-10.6 2.1z" fill="#f6f1e7"/><path d="M17 10.8v14.9" stroke="#1f4fa3" stroke-width="1.6"/></svg>
+      Historiebog
+    </span>
+    <div>
+      <p>Historie på Middelfart Gymnasium · 2026</p>
+      <p>Billeder: Verdenskort efter Ptolemæus, trykt i Ulm 1482. Portugisiske karakker ud for en klippekyst, maleri fra ca. 1540. Begge er fri af ophavsret og hentet fra Wikimedia Commons.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Afsnit i Portugals historie ---------- */
+  var PORTUGAL = {
+    "1.1": ["1-1-foer-portugal-blev-portugal", "Før Portugal blev Portugal"],
+    "1.2": ["1-2-araberne-og-reconquista", "Araberne og reconquista"],
+    "1.3": ["1-3-kongeriget-portugal", "Kongeriget Portugal"],
+    "1.4": ["1-4-opdagelsesrejser-og-slaveri", "Opdagelsesrejser og slaveri"],
+    "1.5": ["1-5-vasco-da-gama-og-asien", "Vasco da Gama og Asien"],
+    "1.6": ["1-6-fra-stormagt-til-udkant", "Fra stormagt til udkant"],
+    "1.7": ["1-7-jordskaelvet-og-napoleon", "Jordskælvet og Napoleon"],
+    "1.8": ["1-8-et-stille-diktatur", "Et stille diktatur"],
+    "1.9": ["1-9-estado-novo-og-krigen", "Estado Novo og krigen"],
+    "1.10": ["1-10-nellikerevolutionen-og-i-dag", "Nellikerevolutionen og i dag"]
+  };
+
+  /* ---------- Perioderne ----------
+     Hver begivenhed: [sorteringsår, vist årstal, tekst]. Teksten må ikke
+     nævne årstallet, for den bruges også i kronologi-øvelsen. */
+  var PERIODER = [
+    { navn: "Oldtiden", kort: "Oldtid", aar: "Før ca. 800 f.v.t.", kortAar: "før 800 f.v.t.", farve: "#c9a256",
+      tekst: "Mennesker går fra at være jægere og samlere til at dyrke jorden. De første byer, riger og skriftsprog opstår ved de store floder i Mellemøsten og Egypten.",
+      verden: [[-10000, "ca. 10.000 f.v.t.", "Landbruget opstår i Mellemøsten"],
+               [-3200, "ca. 3200 f.v.t.", "Skriften opfindes i Mesopotamien"],
+               [-2560, "ca. 2560 f.v.t.", "Den store pyramide i Giza står færdig"],
+               [-1750, "ca. 1750 f.v.t.", "Kong Hammurabi giver Babylon en skreven lov"]],
+      danmark: [[-3900, "ca. 3900 f.v.t.", "Landbruget kommer til Danmark"],
+                [-1700, "ca. 1700 f.v.t.", "Bronzealderen begynder i Danmark"],
+                [-1400, "ca. 1400 f.v.t.", "Solvognen fra Trundholm bliver lavet"]],
+      portugal: ["1.1"] },
+    { navn: "Antikken", kort: "Antikken", aar: "Ca. 800 f.v.t. til ca. 500", kortAar: "800 f.v.t.-500", farve: "#c4873f",
+      tekst: "Grækere og romere skaber bystater, demokrati, filosofi og et imperium rundt om Middelhavet. Mange af Europas ideer om politik, ret og kunst kommer herfra.",
+      verden: [[-508, "508 f.v.t.", "Athen indfører demokrati"],
+               [-27, "27 f.v.t.", "Augustus bliver Roms første kejser"],
+               [30, "ca. 30", "Jesus bliver korsfæstet i Jerusalem"],
+               [476, "476", "Det Vestromerske Rige går under"]],
+      danmark: [[-500, "ca. 500 f.v.t.", "Jernalderen begynder i Danmark"],
+                [-350, "ca. 350 f.v.t.", "Hjortspringbåden bliver ofret i en mose på Als"],
+                [400, "ca. 400", "Guldhornene bliver lavet"]],
+      portugal: ["1.1"] },
+    { navn: "Middelalderen", kort: "Middelalder", aar: "Ca. 500 til ca. 1500", kortAar: "500-1500", farve: "#b5683a",
+      tekst: "De fleste mennesker er bønder, og samfundet er delt i stænder: dem, der beder, dem, der kæmper, og dem, der arbejder. Islam breder sig fra Arabien, og korstogene sætter kristne og muslimer op mod hinanden.",
+      verden: [[622, "622", "Muhammed udvandrer til Medina, og den islamiske tidsregning begynder"],
+               [711, "711", "Arabere og berbere går i land på Den Iberiske Halvø"],
+               [800, "800", "Karl den Store bliver kronet til kejser i Rom"],
+               [1096, "1096-1099", "Det første korstog"],
+               [1347, "1347-1351", "Den sorte død dræber mindst hver tredje europæer"]],
+      danmark: [[800, "ca. 800-1050", "Vikingetiden"],
+                [965, "ca. 965", "Harald Blåtand rejser den store Jellingsten"],
+                [1241, "1241", "Jyske Lov bliver givet"],
+                [1397, "1397", "Kalmarunionen samler Norden under én konge"]],
+      portugal: ["1.2", "1.3"] },
+    { navn: "Renæssance og opdagelser", kort: "Renæssance", aar: "Ca. 1450 til ca. 1650", kortAar: "1450-1650", farve: "#9c5040",
+      tekst: "Bogtrykket spreder nye ideer, og reformationen deler kirken. Europæiske skibe sejler over verdenshavene, og handel, kolonier og slavehandel binder kontinenterne sammen.",
+      verden: [[1450, "ca. 1450", "Gutenberg begynder at trykke bøger med løse typer"],
+               [1492, "1492", "Columbus når Amerika"],
+               [1498, "1498", "Vasco da Gama når Indien ad søvejen"],
+               [1517, "1517", "Luther offentliggør sine 95 teser, og reformationen begynder"]],
+      danmark: [[1536, "1536", "Reformationen gør Danmark luthersk"],
+                [1588, "1588-1648", "Christian 4. er konge"]],
+      portugal: ["1.4", "1.5", "1.6"] },
+    { navn: "Enevælde og oplysning", kort: "Enevælde", aar: "Ca. 1650 til 1789", kortAar: "1650-1789", farve: "#7c4a62",
+      tekst: "Konger samler al magt hos sig selv. Samtidig kræver oplysningstidens tænkere, at fornuft, frihed og rettigheder skal veje tungere end tradition og tro.",
+      verden: [[1648, "1648", "Den westfalske fred afslutter Trediveårskrigen"],
+               [1755, "1755", "Et jordskælv lægger Lissabon i ruiner"],
+               [1776, "1776", "USA erklærer sig uafhængigt af Storbritannien"]],
+      danmark: [[1658, "1658", "Freden i Roskilde: Skåne, Halland og Blekinge bliver svenske"],
+                [1660, "1660", "Enevælden bliver indført"],
+                [1788, "1788", "Stavnsbåndet bliver ophævet"]],
+      portugal: ["1.6", "1.7"] },
+    { navn: "Revolutioner og industri", kort: "Revolutioner", aar: "1789 til 1914", kortAar: "1789-1914", farve: "#58508a",
+      tekst: "Revolutioner kræver frihed og lighed, og nationalismen vokser. Dampmaskiner og fabrikker ændrer arbejdet, og Europas stormagter deler det meste af Afrika og store dele af Asien mellem sig.",
+      verden: [[1789, "1789", "Den franske revolution"],
+               [1848, "1848", "Revolutioner i store dele af Europa"],
+               [1884, "1884-1885", "Berlinkonferencen: Europas stormagter aftaler, hvordan Afrika skal deles"]],
+      danmark: [[1849, "1849", "Danmark får sin første grundlov"],
+                [1864, "1864", "Danmark taber krigen mod Preussen og Østrig og mister hertugdømmerne"],
+                [1901, "1901", "Systemskiftet: Venstre danner regering"]],
+      portugal: ["1.7"] },
+    { navn: "Verdenskrigene og den kolde krig", kort: "Verdenskrige", aar: "1914 til 1991", kortAar: "1914-1991", farve: "#33579d",
+      tekst: "To verdenskrige, diktaturer og folkedrab. Bagefter står USA og Sovjetunionen over for hinanden i den kolde krig, kolonierne bliver selvstændige, og i Vesteuropa bygges velfærdsstater.",
+      verden: [[1914, "1914-1918", "Første verdenskrig"],
+               [1929, "1929", "Børskrakket i New York"],
+               [1939, "1939-1945", "Anden verdenskrig"],
+               [1974, "1974", "Nellikerevolutionen afslutter diktaturet i Portugal"],
+               [1989, "1989", "Berlinmuren falder"]],
+      danmark: [[1915, "1915", "Kvinder får stemmeret til Folketinget"],
+                [1920, "1920", "Genforeningen med Sønderjylland"],
+                [1940, "1940-1945", "Tyskland besætter Danmark"],
+                [1973, "1973", "Danmark bliver medlem af EF"]],
+      portugal: ["1.8", "1.9", "1.10"] },
+    { navn: "Efter den kolde krig", kort: "I dag", aar: "1991 til i dag", kortAar: "1991-i dag", farve: "#1f4fa3",
+      tekst: "Sovjetunionen er væk, og verden bindes tættere sammen af handel, internet og EU. Terror, finanskrise, klimaforandringer og nye krige i Europa præger tiden.",
+      verden: [[1991, "1991", "Sovjetunionen bliver opløst"],
+               [2001, "2001", "Terrorangrebet på USA den 11. september"],
+               [2008, "2008", "Den globale finanskrise"],
+               [2022, "2022", "Rusland invaderer hele Ukraine"]],
+      danmark: [[1992, "1992", "Danskerne stemmer nej til Maastricht-traktaten"],
+                [1993, "1993", "Danskerne stemmer ja til Edinburgh-aftalen med fire forbehold"],
+                [2020, "2020", "Coronaepidemien lukker store dele af Danmark ned"]],
+      portugal: ["1.10"] }
+  ];
+
+  function svg(id, cls) {
+    return '<svg' + (cls ? ' class="' + cls + '"' : '') + ' aria-hidden="true"><use href="#' + id + '"/></svg>';
+  }
+  function liste(h) {
+    return h.map(function (b) {
+      return '<li><span class="aarstal">' + b[1] + '</span>' + b[2] + '</li>';
+    }).join("");
+  }
+
+  /* ---------- Tidslinje ---------- */
+  var bar = document.getElementById("perioder");
+  var panel = document.getElementById("periode-panel");
+  var knapper = [];
+  var valgtPeriode = -1;
+
+  PERIODER.forEach(function (p, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "periode-knap";
+    b.style.setProperty("--farve", p.farve);
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<span class="pk-navn">' + p.kort + '</span><span class="pk-aar">' + p.kortAar + '</span>';
+    b.addEventListener("click", function () { vaelgPeriode(i); });
+    bar.appendChild(b);
+    knapper.push(b);
+  });
+
+  function vaelgPeriode(i) {
+    valgtPeriode = i;
+    var p = PERIODER[i];
+    knapper.forEach(function (k, j) { k.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+    var forrige = PERIODER[i - 1], naeste = PERIODER[i + 1];
+    var links = p.portugal.map(function (nr) {
+      var a = PORTUGAL[nr];
+      return '<a class="chip" href="portugal/kapitler/' + a[0] + '.html">' + nr + " " + a[1] + "</a>";
+    }).join("");
+    panel.innerHTML =
+      '<article class="periode" style="--farve:' + p.farve + '">' +
+        '<div class="periode-hoved">' +
+          '<div><p class="periode-aar">' + p.aar + '</p><h3>' + p.navn + '</h3><p class="periode-tekst">' + p.tekst + '</p></div>' +
+          '<div class="periode-pile">' +
+            '<button class="pil-knap" type="button" data-gaa="-1"' + (forrige ? ' aria-label="Forrige periode: ' + forrige.navn + '"' : ' disabled aria-label="Ingen forrige periode"') + '>' + svg("i-pil-v") + '</button>' +
+            '<button class="pil-knap" type="button" data-gaa="1"' + (naeste ? ' aria-label="Næste periode: ' + naeste.navn + '"' : ' disabled aria-label="Ingen næste periode"') + '>' + svg("i-pil") + '</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="periode-lister">' +
+          '<div><h4>' + svg("i-globus") + 'I verden</h4><ol class="haendelser">' + liste(p.verden) + '</ol></div>' +
+          '<div><h4>' + svg("i-flag") + 'I Danmark</h4><ol class="haendelser">' + liste(p.danmark) + '</ol></div>' +
+        '</div>' +
+        '<div class="periode-fod"><span>Læs mere i Portugals historie:</span>' + links + '</div>' +
+      '</article>';
+    panel.querySelectorAll(".pil-knap").forEach(function (k) {
+      k.addEventListener("click", function () {
+        var ny = valgtPeriode + Number(k.getAttribute("data-gaa"));
+        if (ny >= 0 && ny < PERIODER.length) {
+          vaelgPeriode(ny);
+          var fokus = panel.querySelector('.pil-knap[data-gaa="' + k.getAttribute("data-gaa") + '"]');
+          if (fokus && !fokus.disabled) fokus.focus();
+        }
+      });
+    });
+  }
+
+  /* ---------- Træn kronologi ---------- */
+  var pulje = [];
+  PERIODER.forEach(function (p) {
+    p.verden.concat(p.danmark).forEach(function (b) { pulje.push({ n: b[0], aar: b[1], tekst: b[2] }); });
+  });
+  var kortListe = document.getElementById("kronologi-kort");
+  var indsend = document.getElementById("kronologi-indsend");
+  var ryd = document.getElementById("kronologi-ryd");
+  var ny = document.getElementById("kronologi-ny");
+  var svarTekst = document.getElementById("kronologi-svar");
+  var runde = [], raekkefoelge = [];
+
+  function bland(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function nyRunde() {
+    var valgt = [];
+    for (var forsoeg = 0; forsoeg < 50 && valgt.length < 4; forsoeg++) {
+      valgt = [];
+      bland(pulje).forEach(function (b) {
+        if (valgt.length < 4 && valgt.every(function (v) { return Math.abs(v.n - b.n) >= 20; })) valgt.push(b);
+      });
+    }
+    runde = valgt;
+    raekkefoelge = [];
+    svarTekst.textContent = "";
+    svarTekst.className = "tilbagemelding";
+    indsend.hidden = false;
+    ryd.hidden = false;
+    ny.hidden = true;
+    tegnKort();
+  }
+  function tegnKort() {
+    kortListe.innerHTML = "";
+    runde.forEach(function (b, i) {
+      var li = document.createElement("li");
+      var k = document.createElement("button");
+      k.type = "button";
+      k.className = "begivenhed";
+      var plads = raekkefoelge.indexOf(i);
+      if (plads >= 0) k.classList.add("valgt");
+      k.innerHTML = '<span class="plads">' + (plads >= 0 ? plads + 1 : "") + '</span>' + b.tekst + '<span class="facit"></span>';
+      k.setAttribute("aria-label", b.tekst + (plads >= 0 ? ", valgt som nummer " + (plads + 1) : ", ikke valgt endnu"));
+      k.addEventListener("click", function () {
+        var p = raekkefoelge.indexOf(i);
+        if (p >= 0) raekkefoelge.splice(p, 1); else raekkefoelge.push(i);
+        tegnKort();
+        var igen = kortListe.querySelectorAll(".begivenhed")[i];
+        if (igen) igen.focus();
+      });
+      li.appendChild(k);
+      kortListe.appendChild(li);
+    });
+    indsend.disabled = raekkefoelge.length !== runde.length;
+  }
+  indsend.addEventListener("click", function () {
+    var sorteret = runde.map(function (b, i) { return i; }).sort(function (a, b) { return runde[a].n - runde[b].n; });
+    var rigtige = 0;
+    var kort = kortListe.querySelectorAll(".begivenhed");
+    runde.forEach(function (b, i) {
+      var din = raekkefoelge.indexOf(i), ret = sorteret.indexOf(i);
+      var k = kort[i];
+      k.disabled = true;
+      k.classList.remove("valgt");
+      if (din === ret) { rigtige++; k.classList.add("rigtig"); }
+      else k.classList.add("forkert");
+      k.querySelector(".facit").textContent = b.aar + (din === ret ? " · rigtig plads" : " · hører til som nr. " + (ret + 1));
+      k.setAttribute("aria-label", b.tekst + ", " + b.aar + (din === ret ? ", rigtig plads" : ", hører til som nummer " + (ret + 1)));
+    });
+    if (rigtige === 4) { svarTekst.textContent = "Flot! Alle fire står på den rigtige plads."; svarTekst.className = "tilbagemelding godt"; }
+    else { svarTekst.textContent = rigtige + " af 4 står på den rigtige plads. Se årstallene på kortene."; svarTekst.className = "tilbagemelding delvis"; }
+    indsend.hidden = true;
+    ryd.hidden = true;
+    ny.hidden = false;
+    ny.focus();
+  });
+  ryd.addEventListener("click", function () { raekkefoelge = []; tegnKort(); });
+  ny.addEventListener("click", nyRunde);
+  nyRunde();
+
+  /* ---------- Værktøjskassen ---------- */
+  var vtKort = Array.prototype.slice.call(document.querySelectorAll(".vt-kort"));
+  var vtPaneler = Array.prototype.slice.call(document.querySelectorAll(".vt-panel"));
+
+  function aabnVaerktoej(id, rul) {
+    var aaben = null;
+    vtPaneler.forEach(function (p) {
+      var vis = p.id === id;
+      p.hidden = !vis;
+      if (vis) aaben = p;
+    });
+    vtKort.forEach(function (k) { k.setAttribute("aria-expanded", k.getAttribute("aria-controls") === id ? "true" : "false"); });
+    if (aaben && rul) {
+      var top = aaben.getBoundingClientRect().top;
+      if (top < 0 || top > window.innerHeight * 0.6) aaben.scrollIntoView({ block: "start" });
+    }
+  }
+  vtKort.forEach(function (k) {
+    k.addEventListener("click", function () {
+      var id = k.getAttribute("aria-controls");
+      aabnVaerktoej(k.getAttribute("aria-expanded") === "true" ? null : id, true);
+    });
+  });
+  vtPaneler.forEach(function (p) {
+    p.querySelector(".luk").addEventListener("click", function () {
+      var kort = document.querySelector('.vt-kort[aria-controls="' + p.id + '"]');
+      aabnVaerktoej(null, false);
+      if (kort) kort.focus();
+    });
+  });
+  function fraAdresse() {
+    var id = location.hash.slice(1);
+    if (id && document.getElementById(id) && document.getElementById(id).classList.contains("vt-panel")) {
+      aabnVaerktoej(id, false);
+      document.getElementById(id).scrollIntoView({ block: "start" });
+    }
+  }
+  window.addEventListener("hashchange", fraAdresse);
+  fraAdresse();
+
+  /* ---------- Øvelse: troværdighed ---------- */
+  var GRADER = ["i meget ringe grad", "i ringe grad", "i nogen grad", "i højere grad", "i høj grad", "i meget høj grad"];
+  var troevSvar = { 1: -1, 2: -1 };
+  var troevIndsend = document.getElementById("troev-indsend");
+  var troevIgen = document.getElementById("troev-igen");
+  var oevelse = document.getElementById("troevaerdighed-oevelse");
+
+  function tegnSkalaer() {
+    oevelse.querySelectorAll(".spm").forEach(function (spm) {
+      var nr = spm.getAttribute("data-spm");
+      var skala = spm.querySelector(".skala");
+      skala.innerHTML = "";
+      GRADER.forEach(function (g, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "skala-trin";
+        b.setAttribute("role", "radio");
+        b.setAttribute("aria-checked", troevSvar[nr] === i ? "true" : "false");
+        b.textContent = g;
+        b.addEventListener("click", function () {
+          troevSvar[nr] = i;
+          skala.querySelectorAll(".skala-trin").forEach(function (x, j) { x.setAttribute("aria-checked", j === i ? "true" : "false"); });
+          troevIndsend.disabled = troevSvar[1] < 0 || troevSvar[2] < 0;
+        });
+        skala.appendChild(b);
+      });
+      var svar = spm.querySelector(".svar");
+      svar.className = "svar";
+      svar.textContent = "";
+    });
+    troevIndsend.disabled = true;
+    troevIndsend.hidden = false;
+    troevIgen.hidden = true;
+  }
+  troevIndsend.addEventListener("click", function () {
+    var s1 = troevSvar[1], s2 = troevSvar[2];
+    var svar1 = oevelse.querySelector('.spm[data-spm="1"] .svar');
+    var svar2 = oevelse.querySelector('.spm[data-spm="2"] .svar');
+    var forklaring1 = "Plakaten er lavet af regimet selv. Den viser præcis det billede, regimet ville give portugiserne. Til det spørgsmål er den i høj grad troværdig.";
+    var forklaring2 = "Plakaten viser kun det, regimet ville vise. Fattigdom, censur og det hemmelige politi er ikke med. Til det spørgsmål er den i ringe grad troværdig.";
+    if (s1 >= 4) { svar1.className = "svar vis godt"; svar1.textContent = "Rigtigt. " + forklaring1; }
+    else if (s1 === 3) { svar1.className = "svar vis naesten"; svar1.textContent = "Tæt på. " + forklaring1; }
+    else { svar1.className = "svar vis galt"; svar1.textContent = "Ikke helt. " + forklaring1; }
+    if (s2 <= 1) { svar2.className = "svar vis godt"; svar2.textContent = "Rigtigt. " + forklaring2; }
+    else if (s2 === 2) { svar2.className = "svar vis naesten"; svar2.textContent = "Tæt på. " + forklaring2; }
+    else { svar2.className = "svar vis galt"; svar2.textContent = "Ikke helt. " + forklaring2; }
+    oevelse.querySelectorAll("button.skala-trin").forEach(function (b) { b.disabled = true; });
+    troevIndsend.hidden = true;
+    troevIgen.hidden = false;
+    troevIgen.focus();
+  });
+  troevIgen.addEventListener("click", function () {
+    troevSvar = { 1: -1, 2: -1 };
+    tegnSkalaer();
+  });
+  tegnSkalaer();
+})();
+</script>
 </body>
 </html>
