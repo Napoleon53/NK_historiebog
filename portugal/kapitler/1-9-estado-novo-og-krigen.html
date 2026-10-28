@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -44,10 +44,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d21aff57bae3d4c874949636af60830b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8cb0fd9f36e99dae52d2e6dd91f060a0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -235,6 +235,25 @@ ul.task-list li input[type="checkbox"] {
 <figcaption>Fodboldsportens største stjerner i 1960’erne Pelé fra Brasilien og Eusébio fra Portugal. Og var man som portugiser stadig bare lidt historisk stolt af det portugisiske imperium, kunne man være stolt af - og tale med - dem begge.</figcaption>
 </figure>
 </div>
+<div class="fokusboks callout callout-style-default callout-note no-icon callout-titled" title="Fokusspørgsmål">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Fokusspørgsmål
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>På hvilke måder lignede Portugal/Estado Novo mellem 1926 og 1974 et demokrati? Og hvorfor var det ikke tilfældet?</li>
+<li>Hvordan holdt Estado Novo styr på befolkningen? Og hvorfor kan styret kaldes både mildt og meget undertrykkende, alt efter hvad man sammenligner med?</li>
+<li>Hvad lavede Portugal under 2. verdenskrig?</li>
+<li>Hvorfor blev Lissabon et vigtigt sted for flygtninge under krigen, og hvad gjorde diplomater som Aristides de Sousa Mendes?</li>
+<li>Hvorfor ville Portugal gerne være med i NATO, men ikke i det europæiske samarbejde, der senere blev til EU?</li>
+</ol>
+</div>
+</div>
 
 
 
@@ -282,6 +301,140 @@ ul.task-list li input[type="checkbox"] {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();
 })();
+</script>
+<script>
+// Fokusspørgsmål sidst i hvert afsnit (Niels 28. okt. 2026). Bygget på Kemibogens stil/fokusspoergsmaal.html, men her er
+// der ingen Kort sagt: boksen ::: {.callout-note .fokusboks title="Fokusspørgsmål"} viser spørgsmålene med det samme.
+// Spørgsmålene skrives af _vaerktoej/lav_kapitel.py (FOKUS).
+//
+// Scriptet sætter knappen Kopiér i boksens titellinje. Den lægger spørgsmålene i udklipsholderen med afsnittets titel og
+// adresse, så læreren kan sende dem til eleverne: både som formateret tekst (nummereret liste og link, når de sættes ind
+// i Teams, Word eller en mail) og som ren tekst. Uden JavaScript ses spørgsmålene stadig, bare uden knap.
+// Stilen står i stil/portugal.scss (.fs-knap er Kemibogens).
+document.addEventListener("DOMContentLoaded", function () {
+  var bokse = document.querySelectorAll("main .callout.fokusboks");
+  if (!bokse.length) return;
+
+  function el(navn, klasse, tekst) {
+    var e = document.createElement(navn);
+    if (klasse) e.className = klasse;
+    if (tekst) e.textContent = tekst;
+    return e;
+  }
+  function saetTekst(k, ikon, tekst) {
+    k.querySelector(".bi").className = "bi " + ikon;
+    k.querySelector(".fs-knaptekst").textContent = tekst;
+  }
+  function escape(t) {
+    return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  // Afsnittets titel (fx "1.4 Opdagelsesrejser og slaveri") uden linkikonet
+  function titel() {
+    var h1 = document.querySelector("main h1.title") || document.querySelector("main h1");
+    if (!h1) return document.title;
+    var kopi = (h1.querySelector(".quarto-section-identifier") || h1).cloneNode(true);
+    Array.prototype.forEach.call(kopi.querySelectorAll(".anchorjs-link, .screen-reader-only"), function (e) {
+      e.parentNode.removeChild(e);
+    });
+    return kopi.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  function renTekst(node) {
+    return node.textContent.replace(/\s+/g, " ").trim();
+  }
+  // Formateret tekst: kun kursiv og fed skrift følger med
+  var BEHOLD = { EM: "em", I: "em", STRONG: "strong", B: "strong" };
+  function renHtml(node) {
+    var ud = "";
+    Array.prototype.forEach.call(node.childNodes, function (n) {
+      if (n.nodeType === 3) {
+        ud += escape(n.nodeValue);
+      } else if (n.nodeType === 1) {
+        var tag = BEHOLD[n.tagName];
+        ud += tag ? "<" + tag + ">" + renHtml(n) + "</" + tag + ">" : renHtml(n);
+      }
+    });
+    return ud.replace(/\s+/g, " ").trim();
+  }
+
+  function kopier(tekst, html, faerdig) {
+    // Den gamle måde virker også uden https: et markeret tekstfelt, og ved kopieringen lægges begge udgaver ind
+    function iHaanden() {
+      var felt = el("textarea");
+      felt.value = tekst;
+      felt.setAttribute("readonly", "");
+      felt.style.position = "fixed";
+      felt.style.top = "0";
+      felt.style.opacity = "0";
+      document.body.appendChild(felt);
+      felt.select();
+      function vedKopi(e) {
+        if (!e.clipboardData) return;
+        e.clipboardData.setData("text/plain", tekst);
+        e.clipboardData.setData("text/html", html);
+        e.preventDefault();
+      }
+      document.addEventListener("copy", vedKopi);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.removeEventListener("copy", vedKopi);
+      document.body.removeChild(felt);
+      faerdig(ok);
+    }
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write && window.isSecureContext) {
+      try {
+        navigator.clipboard.write([new ClipboardItem({
+          "text/plain": new Blob([tekst], { type: "text/plain" }),
+          "text/html": new Blob([html], { type: "text/html" })
+        })]).then(function () { faerdig(true); }, iHaanden);
+        return;
+      } catch (e) {}
+    }
+    iHaanden();
+  }
+
+  Array.prototype.forEach.call(bokse, function (boks) {
+    var hoved = boks.querySelector(".callout-header");
+    var liste = boks.querySelector(".callout-body-container ol");
+    if (!hoved || !liste) return;
+
+    boks.classList.add("fs-boks");
+    boks.removeAttribute("title"); // ellers viser musen "Fokusspørgsmål" over hele boksen
+
+    var kopiKnap = el("button", "fs-knap fs-kopier");
+    kopiKnap.type = "button";
+    var ikon = el("i", "bi bi-clipboard");
+    ikon.setAttribute("aria-hidden", "true");
+    kopiKnap.appendChild(ikon);
+    kopiKnap.appendChild(el("span", "fs-knaptekst", "Kopiér"));
+    kopiKnap.title = "Kopiér fokusspørgsmålene, så du kan sende dem til eleverne";
+    var knapper = el("div", "fs-knapper");
+    knapper.appendChild(kopiKnap);
+    hoved.appendChild(knapper);
+
+    var ur = null;
+    kopiKnap.addEventListener("click", function () {
+      var side = location.href.split("#")[0].split("?")[0];
+      var afsnit = titel();
+      var punkter = Array.prototype.slice.call(liste.querySelectorAll("li"));
+      var tekst = "Fokusspørgsmål til " + afsnit + "\n" + side + "\n\n" +
+        punkter.map(function (li, i) { return (i + 1) + ". " + renTekst(li); }).join("\n") + "\n";
+      var html = "<p><strong>Fokusspørgsmål til <a href=\"" + escape(side) + "\">" + escape(afsnit) +
+        "</a></strong></p><ol>" +
+        punkter.map(function (li) { return "<li>" + renHtml(li) + "</li>"; }).join("") + "</ol>";
+      kopier(tekst, html, function (ok) {
+        saetTekst(kopiKnap, ok ? "bi-check-lg" : "bi-x-lg", ok ? "Kopieret" : "Kunne ikke kopiere");
+        kopiKnap.classList.add("fs-kopieret");
+        clearTimeout(ur);
+        ur = setTimeout(function () {
+          saetTekst(kopiKnap, "bi-clipboard", "Kopiér");
+          kopiKnap.classList.remove("fs-kopieret");
+        }, 2200);
+      });
+    });
+  });
+});
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
