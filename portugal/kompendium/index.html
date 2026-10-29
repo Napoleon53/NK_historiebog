@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Byg dit kompendium · Portugals historie</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231d4e89'/%3E%3Cpath d='M9 10h14M9 16h14M9 22h9' stroke='white' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<!--
+  Siden, hvor læreren sætter kompendiet til Portugals historie sammen (29. okt. 2026). Den læser data/kapitler.js og
+  data/kapitel-1-pdf.js, som laves af _vaerktoej/kompendium/lav_kompendium.py, og sætter PDF'en sammen i browseren med
+  saml.js og pdf-lib.min.js (kopier fra Kemibogens kompendiebygger). Ét modul er ét afsnit: fokusspørgsmål og øvelser.
+  Siden begynder uden valgte moduler, som Kemibogens side.
+-->
+<style>
+:root {
+  --blaa: #1d4e89; --blaa-mork: #153a66; --blaa-lys: #e3ebf5; --blaa-kant: #c3d0e2;
+  --blaek: #14201f; --daempet: #556766; --bund: #f6f8fb; --hvid: #fff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bund); color: var(--blaek);
+  font: 16px/1.5 "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+.top { background: var(--hvid); border-bottom: 1px solid var(--blaa-kant); }
+.top .indre { max-width: 1120px; margin: 0 auto; padding: 28px 24px 22px; }
+.maerke { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--blaa); }
+.maerke a { color: inherit; text-decoration: none; }
+h1 { margin: 6px 0 4px; font-size: 32px; line-height: 1.15; }
+.under { margin: 0; color: var(--daempet); max-width: 46em; }
+.side { max-width: 1120px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
+.gruppe { background: var(--hvid); border: 1px solid var(--blaa-kant); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; }
+.gruppe h2 { margin: 0 0 4px; font-size: 19px; }
+.hjaelp { margin: 0 0 12px; color: var(--daempet); font-size: 14.5px; }
+.handlinger { margin: 0 0 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.knap-lille { font: inherit; font-size: 13.5px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--blaa-kant);
+  background: var(--hvid); color: var(--blaa); cursor: pointer; }
+.knap-lille:hover { background: var(--blaa-lys); }
+.raekke { border-top: 1px solid #e6ebf2; padding: 9px 0; }
+.raekke:first-of-type { border-top: 0; }
+.kryds { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: baseline; cursor: pointer; }
+.kryds input { width: 17px; height: 17px; accent-color: var(--blaa); margin: 0; transform: translateY(3px); }
+.kryds .navn { font-weight: 600; }
+.kryds .nr { color: var(--blaa); font-weight: 700; margin-right: 6px; }
+.kryds .omfang { color: var(--daempet); font-size: 13.5px; white-space: nowrap; }
+.dele { margin: 6px 0 0 32px; display: flex; gap: 8px; flex-wrap: wrap; }
+.dele[hidden] { display: none; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--blaa-kant); background: var(--hvid); cursor: pointer; user-select: none; }
+.chip input { accent-color: var(--blaa); margin: 0; }
+.chip.til { background: var(--blaa-lys); border-color: var(--blaa); }
+.chip small { color: var(--daempet); }
+.note { margin: 4px 0 0 32px; font-size: 13.5px; color: var(--daempet); }
+.kurv { position: sticky; top: 16px; background: var(--hvid); border: 1px solid var(--blaa-kant); border-radius: 10px; padding: 18px 18px 20px; }
+.kurv h2 { margin: 0; font-size: 17px; }
+.tal { margin: 6px 0 0; font-size: 34px; font-weight: 700; color: var(--blaa); line-height: 1.1; }
+.tal small { font-size: 15px; font-weight: 600; color: var(--daempet); }
+.ark { margin: 2px 0 10px; font-size: 13.5px; color: var(--daempet); }
+.oversigt { list-style: none; margin: 0 0 14px; padding: 0; font-size: 13.5px; max-height: 46vh; overflow: auto; }
+.oversigt li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px dotted #d7dee8; }
+.oversigt li span:last-child { color: var(--daempet); white-space: nowrap; }
+.oversigt .tom { color: var(--daempet); border: 0; }
+.knap { width: 100%; font: inherit; font-weight: 700; padding: 10px; border: 0; border-radius: 8px; background: var(--blaa);
+  color: var(--hvid); cursor: pointer; }
+.knap:hover { background: var(--blaa-mork); }
+.knap:disabled { background: #8aa1c0; cursor: default; }
+.klar { margin-top: 12px; font-size: 14.5px; }
+.klar p { margin: 0 0 8px; }
+.klar a { display: inline-block; margin-right: 12px; color: var(--blaa); font-weight: 600; }
+.besked { margin: 12px 0 0; color: #b42318; font-size: 14px; }
+@media (max-width: 860px) {
+  .side { grid-template-columns: 1fr; padding: 16px; }
+  .top .indre { padding: 22px 16px 18px; }
+  .kurv { position: static; }
+  h1 { font-size: 27px; }
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="indre">
+  <p class="maerke"><a href="../index.html">Historiebog · Portugals historie</a></p>
+  <h1>Byg dit kompendium</h1>
+  <p class="under">Vælg de moduler, kompendiet skal have, og lav en PDF til print. Et modul er et afsnit i forløbet: en side med
+    fokusspørgsmål til lektien og to sider med øvelser, som eleverne løser med blyant i timen.</p>
+</div></header>
+
+<main class="side">
+  <div>
+    <section class="gruppe">
+      <h2>Moduler</h2>
+      <p class="hjaelp">Sæt kryds ved modulerne. Under et valgt modul kan du slå fokusspørgsmålene eller øvelserne fra.</p>
+      <div class="handlinger">
+        <button type="button" class="knap-lille" id="alle">Vælg alle moduler</button>
+        <button type="button" class="knap-lille" id="ingen">Fjern alle</button>
+      </div>
+      <div id="moduler"></div>
+    </section>
+
+    <section class="gruppe">
+      <h2>Til sidst i forløbet</h2>
+      <div id="sidst"></div>
+    </section>
+
+    <section class="gruppe">
+      <h2>Forside</h2>
+      <div id="forsiden"></div>
+    </section>
+  </div>
+
+  <aside class="kurv">
+    <h2>Dit kompendium</h2>
+    <p class="tal" aria-live="polite"><span id="sider">0</span> <small id="sideord">sider</small></p>
+    <p class="ark" id="ark"></p>
+    <ol class="oversigt" id="oversigt"></ol>
+    <button class="knap" id="lav" type="button">Lav PDF</button>
+    <div class="klar" id="klar" hidden>
+      <p id="klartekst"></p>
+      <a id="aabn" target="_blank" rel="noopener">Åbn PDF</a>
+      <a id="gem">Gem PDF</a>
+    </div>
+    <p class="besked" id="besked" hidden></p>
+  </aside>
+</main>
+
+<script src="pdf-lib.min.js"></script>
+<script src="saml.js"></script>
+<script src="data/kapitler.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var kapitler = window.KOMPENDIER || {};
+  var NR = Kompendium.numre(kapitler)[0];
+  var data = kapitler[NR];
+  if (!data) {
+    $('moduler').textContent = 'Delene til kompendiet mangler (data/kapitler.js).';
+    return;
+  }
+  var valg = Kompendium.standardvalg(kapitler);
+  var v = valg.kapitler[NR];
+  // Siden begynder uden valgte moduler. Et valgt modul har fokusspørgsmål og øvelser.
+  data.afsnit.forEach(function (a) { v.afsnit[a.nr] = { med: false, noter: true, ekstra: false, opgaver: 'mellem' }; });
+  var adresse = null;
+
+  function del(id) { return data.dele.filter(function (d) { return d.id === id; })[0]; }
+  function sider(n) { return n + (n === 1 ? ' side' : ' sider'); }
+  function tekst(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function modulnr(nr) { return parseInt(nr.split('.')[1], 10); }
+  function fokusdel(a) { return del(a.noter); }
+  function oevelsesdel(a) { return del(a.opgaver.mellem); }
+  function moduletsSider(a) {
+    var av = v.afsnit[a.nr];
+    return (av.noter ? fokusdel(a).sider : 0) + (av.opgaver === 'mellem' && a.opgaver.mellem ? oevelsesdel(a).sider : 0);
+  }
+
+  function bygModuler() {
+    $('moduler').innerHTML = data.afsnit.map(function (a) {
+      var av = v.afsnit[a.nr];
+      var f = fokusdel(a), o = a.opgaver.mellem ? oevelsesdel(a) : null;
+      return '<div class="raekke">' +
+        '<label class="kryds"><input type="checkbox" id="modul-' + a.nr + '"' + (av.med ? ' checked' : '') + '>' +
+        '<span class="navn"><span class="nr">Modul ' + modulnr(a.nr) + '</span>' + tekst(a.titel) + '</span>' +
+        '<span class="omfang" id="omfang-' + a.nr + '"></span></label>' +
+        '<div class="dele" id="dele-' + a.nr + '"' + (av.med ? '' : ' hidden') + '>' +
+        '<label class="chip' + (av.noter ? ' til' : '') + '"><input type="checkbox" id="fokus-' + a.nr + '"' + (av.noter ? ' checked' : '') +
+        '>Fokusspørgsmål <small>' + sider(f.sider) + '</small></label>' +
+        (o ? '<label class="chip' + (av.opgaver === 'mellem' ? ' til' : '') + '"><input type="checkbox" id="oevelser-' + a.nr + '"' +
+          (av.opgaver === 'mellem' ? ' checked' : '') + '>Øvelser <small>' + sider(o.sider) + '</small></label>' : '') +
+        '</div></div>';
+    }).join('');
+  }
+
+  function bygResten() {
+    $('sidst').innerHTML = data.oevelser.map(function (id) {
+      var d = del(id);
+      var navn = d.titel.replace(/^Repetition: Hele forløbet$/, 'Repetition af hele forløbet');
+      return '<div class="raekke"><label class="kryds"><input type="checkbox" id="del-' + id + '"' + (v.oevelser[id] ? ' checked' : '') + '>' +
+        '<span class="navn">' + tekst(navn) + '</span><span class="omfang">' + sider(d.sider) + '</span></label></div>';
+    }).join('');
+    $('forsiden').innerHTML =
+      '<div class="raekke"><label class="kryds"><input type="checkbox" id="forside"' + (valg.forside ? ' checked' : '') + '>' +
+      '<span class="navn">Forside med plads til navn og klasse</span><span class="omfang">1 side</span></label></div>' +
+      '<div class="raekke"><label class="kryds"><input type="checkbox" id="indhold"' + (valg.indhold ? ' checked' : '') + '>' +
+      '<span class="navn">Indholdsfortegnelse</span><span class="omfang"></span></label>' +
+      '<p class="note" id="forlangt" hidden>Der er for mange linjer til forsiden, så indholdsfortegnelsen står på sin egen side.</p></div>' +
+      '<div class="raekke"><label class="kryds"><input type="checkbox" id="separat"' + (valg.separat ? ' checked' : '') + '>' +
+      '<span class="navn">Separat forside: indholdsfortegnelsen får sin egen side</span><span class="omfang">+ 1 side</span></label></div>';
+  }
+
+  function nogetValgt() {
+    return data.afsnit.some(function (a) { var av = v.afsnit[a.nr]; return av.med && (av.noter || av.opgaver === 'mellem'); }) ||
+      data.oevelser.some(function (id) { return v.oevelser[id]; });
+  }
+
+  function opdater() {
+    v.med = nogetValgt();
+    data.afsnit.forEach(function (a) {
+      var av = v.afsnit[a.nr];
+      $('omfang-' + a.nr).textContent = av.med ? sider(moduletsSider(a)) : sider(fokusdel(a).sider + (a.opgaver.mellem ? oevelsesdel(a).sider : 0));
+      $('dele-' + a.nr).hidden = !av.med;
+    });
+    var plan = Kompendium.plan(kapitler, valg, []);
+    var antal = v.med ? plan.sider : 0;
+    $('sider').textContent = antal;
+    $('sideord').textContent = antal === 1 ? 'side' : 'sider';
+    $('ark').textContent = antal ? 'Det er ' + Math.ceil(antal / 2) + ' A4-ark, når der printes på begge sider.' : '';
+    $('oversigt').innerHTML = v.med ? plan.poster.map(function (p) {
+      var titel = p.slags === 'forside' ? 'Forside' : p.slags === 'indhold' ? 'Indhold' : p.titel;
+      return '<li><span>' + tekst(titel) + '</span><span>' + (p.sider > 1 ? 's. ' + p.side + '-' + (p.side + p.sider - 1) : 's. ' + p.side) + '</span></li>';
+    }).join('') : '<li class="tom">Vælg et modul for at begynde.</li>';
+    $('forlangt').hidden = !plan.forlangt;
+    $('separat').disabled = !valg.forside || !valg.indhold;
+    $('lav').disabled = !v.med;
+    $('klar').hidden = true;
+  }
+
+  document.addEventListener('change', function (h) {
+    var id = h.target.id || '', m;
+    if ((m = /^modul-(.+)$/.exec(id))) v.afsnit[m[1]].med = h.target.checked;
+    else if ((m = /^fokus-(.+)$/.exec(id))) v.afsnit[m[1]].noter = h.target.checked;
+    else if ((m = /^oevelser-(.+)$/.exec(id))) v.afsnit[m[1]].opgaver = h.target.checked ? 'mellem' : 'ingen';
+    else if ((m = /^del-(.+)$/.exec(id))) v.oevelser[m[1]] = h.target.checked;
+    else if (id === 'forside' || id === 'indhold' || id === 'separat') valg[id] = h.target.checked;
+    else return;
+    var chip = h.target.closest('.chip');
+    if (chip) chip.classList.toggle('til', h.target.checked);
+    opdater();
+  });
+
+  function alleModuler(til) {
+    data.afsnit.forEach(function (a) { v.afsnit[a.nr].med = til; $('modul-' + a.nr).checked = til; });
+    opdater();
+  }
+  $('alle').addEventListener('click', function () { alleModuler(true); });
+  $('ingen').addEventListener('click', function () { alleModuler(false); });
+
+  // Kompendiets PDF hentes først, når der skal laves en PDF.
+  function hentPdf(nr) {
+    window.KOMPENDIEPDF = window.KOMPENDIEPDF || {};
+    if (window.KOMPENDIEPDF[nr]) return Promise.resolve(window.KOMPENDIEPDF[nr]);
+    return new Promise(function (klar, fejl) {
+      var script = document.createElement('script');
+      script.src = 'data/' + kapitler[nr].pdffil;
+      script.onload = function () {
+        if (window.KOMPENDIEPDF[nr]) klar(window.KOMPENDIEPDF[nr]);
+        else fejl(new Error('Delene til kompendiet mangler.'));
+      };
+      script.onerror = function () { fejl(new Error('Delene til kompendiet kunne ikke hentes.')); };
+      document.head.appendChild(script);
+    });
+  }
+
+  $('lav').addEventListener('click', function () {
+    var knap = $('lav');
+    var plan = Kompendium.plan(kapitler, valg, []);
+    knap.disabled = true;
+    knap.textContent = 'Laver PDF …';
+    $('besked').hidden = true;
+    Kompendium.saml(PDFLib, kapitler, hentPdf, valg, []).then(function (bytes) {
+      if (adresse) URL.revokeObjectURL(adresse);
+      adresse = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+      $('aabn').href = adresse;
+      $('gem').href = adresse;
+      $('gem').download = Kompendium.navn(kapitler, valg) + '.pdf';
+      $('klartekst').textContent = 'Kompendiet er klar: ' + sider(plan.sider) + '.';
+      $('klar').hidden = false;
+    }).catch(function (fejl) {
+      $('besked').textContent = 'PDF\'en kunne ikke laves. ' + (fejl && fejl.message ? fejl.message : '');
+      $('besked').hidden = false;
+    }).then(function () {
+      knap.disabled = false;
+      knap.textContent = 'Lav PDF';
+    });
+  });
+
+  bygModuler();
+  bygResten();
+  opdater();
+})();
+</script>
+</body>
+</html>
