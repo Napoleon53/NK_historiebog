@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <!-- Historie-Millionaerens emblem: et timeglas med guldsand foran en globus
+       (Kemi-Millionaerens kolbe og benzenring er skiftet ud). De 15 prikker
+       er de 15 spoergsmaal; de to hvide er de sikre beloeb. -->
+  <defs>
+    <radialGradient id="bund" cx="50%" cy="40%" r="62%">
+      <stop offset="0" stop-color="#3558e0"/>
+      <stop offset="0.55" stop-color="#14257a"/>
+      <stop offset="1" stop-color="#070d36"/>
+    </radialGradient>
+    <linearGradient id="guld" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff4b8"/>
+      <stop offset="0.45" stop-color="#f5c542"/>
+      <stop offset="1" stop-color="#b9770e"/>
+    </linearGradient>
+    <linearGradient id="glas" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.16"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="120" cy="120" r="116" fill="url(#guld)"/>
+  <circle cx="120" cy="120" r="108" fill="url(#bund)"/>
+  <circle cx="120" cy="120" r="97" fill="none" stroke="#f5c542" stroke-width="1.5" opacity="0.55"/>
+
+  <!-- De 15 spoergsmaal rundt i kanten -->
+  <g fill="#f5c542">
+    <circle cx="120.0" cy="18.0" r="3.2"/>
+    <circle cx="161.5" cy="26.8" r="3.2"/>
+    <circle cx="195.8" cy="51.7" r="3.2"/>
+    <circle cx="217.0" cy="88.5" r="3.2"/>
+    <circle cx="221.4" cy="130.7" r="4.2" fill="#ffffff"/>
+    <circle cx="208.3" cy="171.0" r="3.2"/>
+    <circle cx="180.0" cy="202.5" r="3.2"/>
+    <circle cx="141.2" cy="219.8" r="3.2"/>
+    <circle cx="98.8" cy="219.8" r="3.2"/>
+    <circle cx="60.0" cy="202.5" r="4.2" fill="#ffffff"/>
+    <circle cx="31.7" cy="171.0" r="3.2"/>
+    <circle cx="18.6" cy="130.7" r="3.2"/>
+    <circle cx="23.0" cy="88.5" r="3.2"/>
+    <circle cx="44.2" cy="51.7" r="3.2"/>
+    <circle cx="78.5" cy="26.8" r="3.2"/>
+  </g>
+
+  <!-- Globussen -->
+  <g fill="none" stroke="#8fb6ff" stroke-width="2.5" opacity="0.45">
+    <circle cx="120" cy="120" r="78"/>
+    <ellipse cx="120" cy="120" rx="34" ry="78"/>
+    <ellipse cx="120" cy="120" rx="62" ry="78"/>
+    <line x1="120" y1="42" x2="120" y2="198"/>
+    <line x1="42" y1="120" x2="198" y2="120"/>
+    <path d="M51 82 Q120 98 189 82"/>
+    <path d="M51 158 Q120 142 189 158"/>
+  </g>
+
+  <!-- Timeglasset -->
+  <path d="M90 64 H150 Q150 100 126 120 Q150 140 150 176 H90 Q90 140 114 120 Q90 100 90 64 Z" fill="url(#glas)"/>
+  <path d="M100 82 H140 Q137 101 120 113 Q103 101 100 82 Z" fill="url(#guld)"/>
+  <path d="M120 128 L120 150" stroke="#f5c542" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M96 170 Q100 152 120 148 Q140 152 144 170 Z" fill="url(#guld)"/>
+  <path d="M90 64 H150 Q150 100 126 120 Q150 140 150 176 H90 Q90 140 114 120 Q90 100 90 64 Z" fill="none" stroke="#eaf1ff" stroke-width="4.5" stroke-linejoin="round"/>
+  <line x1="80" y1="60" x2="160" y2="60" stroke="#eaf1ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="80" y1="180" x2="160" y2="180" stroke="#eaf1ff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M98 74 Q100 92 110 104" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+</svg>
