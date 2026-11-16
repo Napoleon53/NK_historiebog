@@ -36,7 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../index.html" rel="prev">
+<link href="../moduler/modul-6.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -120,7 +120,37 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Fra varm til kold krig</span></a>
+ <span class="menu-text">Om forløbet</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../moduler/modul-1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modul 1: Anden verdenskrig begynder</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../moduler/modul-2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modul 2: Sammen mod Hitler, uenige om freden</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../moduler/modul-3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modul 3: Holocaust og krigens afslutning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../moduler/modul-4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modul 4: Jerntæppet sænker sig</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../moduler/modul-5.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modul 5: Ny amerikansk udenrigspolitik</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../moduler/modul-6.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modul 6: Atombomber og Cubakrisen</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -378,6 +408,140 @@ ul.task-list li input[type="checkbox"] {
 </section>
 
 </main> <!-- /main -->
+<script>
+// Fokusspørgsmål sidst i hvert afsnit (Niels 28. okt. 2026). Bygget på Kemibogens stil/fokusspoergsmaal.html, men her er
+// der ingen Kort sagt: boksen ::: {.callout-note .fokusboks title="Fokusspørgsmål"} viser spørgsmålene med det samme.
+// Kopieret fra Portugal 16. nov. 2026: spørgsmålene står i hånden i moduler/modul-N.qmd.
+//
+// Scriptet sætter knappen Kopiér i boksens titellinje. Den lægger spørgsmålene i udklipsholderen med afsnittets titel og
+// adresse, så læreren kan sende dem til eleverne: både som formateret tekst (nummereret liste og link, når de sættes ind
+// i Teams, Word eller en mail) og som ren tekst. Uden JavaScript ses spørgsmålene stadig, bare uden knap.
+// Stilen står i stil/kold-krig.scss (.fs-knap er Kemibogens).
+document.addEventListener("DOMContentLoaded", function () {
+  var bokse = document.querySelectorAll("main .callout.fokusboks");
+  if (!bokse.length) return;
+
+  function el(navn, klasse, tekst) {
+    var e = document.createElement(navn);
+    if (klasse) e.className = klasse;
+    if (tekst) e.textContent = tekst;
+    return e;
+  }
+  function saetTekst(k, ikon, tekst) {
+    k.querySelector(".bi").className = "bi " + ikon;
+    k.querySelector(".fs-knaptekst").textContent = tekst;
+  }
+  function escape(t) {
+    return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  // Afsnittets titel (fx "1.4 Opdagelsesrejser og slaveri") uden linkikonet
+  function titel() {
+    var h1 = document.querySelector("main h1.title") || document.querySelector("main h1");
+    if (!h1) return document.title;
+    var kopi = (h1.querySelector(".quarto-section-identifier") || h1).cloneNode(true);
+    Array.prototype.forEach.call(kopi.querySelectorAll(".anchorjs-link, .screen-reader-only"), function (e) {
+      e.parentNode.removeChild(e);
+    });
+    return kopi.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  function renTekst(node) {
+    return node.textContent.replace(/\s+/g, " ").trim();
+  }
+  // Formateret tekst: kun kursiv og fed skrift følger med
+  var BEHOLD = { EM: "em", I: "em", STRONG: "strong", B: "strong" };
+  function renHtml(node) {
+    var ud = "";
+    Array.prototype.forEach.call(node.childNodes, function (n) {
+      if (n.nodeType === 3) {
+        ud += escape(n.nodeValue);
+      } else if (n.nodeType === 1) {
+        var tag = BEHOLD[n.tagName];
+        ud += tag ? "<" + tag + ">" + renHtml(n) + "</" + tag + ">" : renHtml(n);
+      }
+    });
+    return ud.replace(/\s+/g, " ").trim();
+  }
+
+  function kopier(tekst, html, faerdig) {
+    // Den gamle måde virker også uden https: et markeret tekstfelt, og ved kopieringen lægges begge udgaver ind
+    function iHaanden() {
+      var felt = el("textarea");
+      felt.value = tekst;
+      felt.setAttribute("readonly", "");
+      felt.style.position = "fixed";
+      felt.style.top = "0";
+      felt.style.opacity = "0";
+      document.body.appendChild(felt);
+      felt.select();
+      function vedKopi(e) {
+        if (!e.clipboardData) return;
+        e.clipboardData.setData("text/plain", tekst);
+        e.clipboardData.setData("text/html", html);
+        e.preventDefault();
+      }
+      document.addEventListener("copy", vedKopi);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.removeEventListener("copy", vedKopi);
+      document.body.removeChild(felt);
+      faerdig(ok);
+    }
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write && window.isSecureContext) {
+      try {
+        navigator.clipboard.write([new ClipboardItem({
+          "text/plain": new Blob([tekst], { type: "text/plain" }),
+          "text/html": new Blob([html], { type: "text/html" })
+        })]).then(function () { faerdig(true); }, iHaanden);
+        return;
+      } catch (e) {}
+    }
+    iHaanden();
+  }
+
+  Array.prototype.forEach.call(bokse, function (boks) {
+    var hoved = boks.querySelector(".callout-header");
+    var liste = boks.querySelector(".callout-body-container ol");
+    if (!hoved || !liste) return;
+
+    boks.classList.add("fs-boks");
+    boks.removeAttribute("title"); // ellers viser musen "Fokusspørgsmål" over hele boksen
+
+    var kopiKnap = el("button", "fs-knap fs-kopier");
+    kopiKnap.type = "button";
+    var ikon = el("i", "bi bi-clipboard");
+    ikon.setAttribute("aria-hidden", "true");
+    kopiKnap.appendChild(ikon);
+    kopiKnap.appendChild(el("span", "fs-knaptekst", "Kopiér"));
+    kopiKnap.title = "Kopiér fokusspørgsmålene, så du kan sende dem til eleverne";
+    var knapper = el("div", "fs-knapper");
+    knapper.appendChild(kopiKnap);
+    hoved.appendChild(knapper);
+
+    var ur = null;
+    kopiKnap.addEventListener("click", function () {
+      var side = location.href.split("#")[0].split("?")[0];
+      var afsnit = titel();
+      var punkter = Array.prototype.slice.call(liste.querySelectorAll("li"));
+      var tekst = "Fokusspørgsmål til " + afsnit + "\n" + side + "\n\n" +
+        punkter.map(function (li, i) { return (i + 1) + ". " + renTekst(li); }).join("\n") + "\n";
+      var html = "<p><strong>Fokusspørgsmål til <a href=\"" + escape(side) + "\">" + escape(afsnit) +
+        "</a></strong></p><ol>" +
+        punkter.map(function (li) { return "<li>" + renHtml(li) + "</li>"; }).join("") + "</ol>";
+      kopier(tekst, html, function (ok) {
+        saetTekst(kopiKnap, ok ? "bi-check-lg" : "bi-x-lg", ok ? "Kopieret" : "Kunne ikke kopiere");
+        kopiKnap.classList.add("fs-kopieret");
+        clearTimeout(ur);
+        ur = setTimeout(function () {
+          saetTekst(kopiKnap, "bi-clipboard", "Kopiér");
+          kopiKnap.classList.remove("fs-kopieret");
+        }, 2200);
+      });
+    });
+  });
+});
+</script>
 <script>
 
 // Fagordlister (sider med "body-classes: fagord" og en tabel under hver overskrift).
@@ -1364,7 +1528,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // kommer fra, fyldt ud. Kun kapitler med en figur får flisen (C 1 til 8 og B1 til B4 indtil videre).
 
-  var BYG_FIGUREN = { "1": "sc1.5_byg_figuren", "2": "sc2.7_byg_figuren", "3": "sc3.6_byg_figuren", "4": "sc4.9_byg_figuren", "5": "sc5.13_byg_figuren", "6": "sc6.4_byg_figuren", "7": "sc7.6_byg_figuren", "8": "sc8.7_byg_figuren", "b1": "sb1.5_byg_figuren", "b2": "sb2.9_byg_figuren", "b3": "sb3.5_byg_figuren", "b4": "sb4.10_byg_figuren", "b5": "sb5.6_byg_figuren" };
+  var BYG_FIGUREN = { "1": "sc1.5_byg_figuren", "2": "sc2.7_byg_figuren", "3": "sc3.6_byg_figuren", "4": "sc4.9_byg_figuren", "5": "sc5.13_byg_figuren", "6": "sc6.4_byg_figuren", "7": "sc7.6_byg_figuren", "8": "sc8.8_byg_figuren", "b1": "sb1.5_byg_figuren", "b2": "sb2.9_byg_figuren", "b3": "sb3.5_byg_figuren", "b4": "sb4.10_byg_figuren", "b5": "sb5.6_byg_figuren" };
 
   // C-bogen: c/fagord/kapitel-7.html giver "7"; B-bogen: b/fagord/kapitel-b1.html giver "b1"
 
@@ -5003,8 +5167,8 @@ document.addEventListener("DOMContentLoaded", function () {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../index.html" class="pagination-link" aria-label="Fra varm til kold krig">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Fra varm til kold krig</span>
+      <a href="../moduler/modul-6.html" class="pagination-link" aria-label="Modul 6: Atombomber og Cubakrisen">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Modul 6: Atombomber og Cubakrisen</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
