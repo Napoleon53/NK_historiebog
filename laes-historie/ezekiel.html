@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c0bc1f44e660802182ad525066c3e0d4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9bf865bd6d00aa75459583ce9e0dc05e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -282,6 +282,68 @@ ul.task-list li input[type="checkbox"] {
     document.addEventListener('click', luk);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') luk(); });
     window.addEventListener('resize', luk);
+  });
+})();
+</script>
+<script>
+// Understreg med musen (Sådan læser du historie, Niels 18. nov. 2026: "Der må også gerne blive lagt op til
+// understregning"). Træk musen hen over ord i teksten, så får de en streg under, som på papir. Et klik på en
+// understregning fjerner den. Kun i sidens tekst (main), ikke i overskrifter, links eller ordenes forklaringsbobler.
+// Understregningerne gemmes ikke: de forsvinder, når siden lukkes.
+(function () {
+  const FORBUDT = 'h1, h2, h3, h4, a, button, .ord-boble, .udtale, .quarto-title, nav, .kreditering';
+  function understreg(range) {
+    let rod = range.commonAncestorContainer;
+    if (rod.nodeType !== 1) rod = rod.parentNode;
+    const noder = [];
+    const gaa = document.createTreeWalker(rod, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!range.intersectsNode(n) || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (n.parentNode.closest(FORBUDT) || n.parentNode.closest('mark.understreg')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    while (gaa.nextNode()) noder.push(gaa.currentNode);
+    noder.forEach(function (n) {
+      const start = n === range.startContainer ? range.startOffset : 0;
+      const slut = n === range.endContainer ? range.endOffset : n.nodeValue.length;
+      if (slut <= start || !n.nodeValue.slice(start, slut).trim()) return;
+      let midt = n;
+      if (start > 0) midt = n.splitText(start);
+      if (slut - start < midt.nodeValue.length) midt.splitText(slut - start);
+      const m = document.createElement('mark');
+      m.className = 'understreg';
+      m.title = 'Klik for at fjerne understregningen';
+      midt.parentNode.insertBefore(m, midt);
+      m.appendChild(midt);
+    });
+  }
+  function fjern(m) {
+    const far = m.parentNode;
+    while (m.firstChild) far.insertBefore(m.firstChild, m);
+    m.remove();
+    far.normalize();
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    const main = document.querySelector('main');
+    if (!main) return;
+    function slip() {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+      if (!main.contains(range.commonAncestorContainer)) return;
+      understreg(range);
+      sel.removeAllRanges();
+    }
+    main.addEventListener('mouseup', function () { setTimeout(slip, 0); });
+    main.addEventListener('touchend', function () { setTimeout(slip, 300); });
+    main.addEventListener('click', function (e) {
+      const m = e.target.closest('mark.understreg');
+      if (!m || e.target.closest('.ord')) return;
+      const sel = window.getSelection();
+      if (sel && !sel.isCollapsed) return;
+      fjern(m);
+    });
   });
 })();
 </script>

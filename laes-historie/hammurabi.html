@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c0bc1f44e660802182ad525066c3e0d4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9bf865bd6d00aa75459583ce9e0dc05e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -208,6 +208,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Hvad:</strong> Omkring 280 love hugget i en sten på 2,25 meter. Før lovene står en indledning, og efter dem en afslutning, hvor kongen fortæller om sig selv.</li>
 </ul>
 </div>
+<p><strong>Mens du læser:</strong> Understreg straffen i hver lov<span class="skaerm">(træk musen hen over ordene)</span>. <span class="papir">Sæt ! i margenen ved den lov, der overrasker dig mest.</span><span class="skaerm">Læg mærke til den lov, der overrasker dig mest.</span></p>
 <section id="læreren-læser" class="level2">
 <h2 class="anchored" data-anchor-id="læreren-læser">Læreren læser</h2>
 <div class="lovtekst">
@@ -217,7 +218,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="du-læser-selv" class="level2">
 <h2 class="anchored" data-anchor-id="du-læser-selv">Du læser selv</h2>
-<p>Læs resten af lovene og slutningen af stenen. Læg mærke til det, der overrasker dig.</p>
+<p>Læs resten af lovene og slutningen af stenen.</p>
 <div class="lovtekst">
 <p><strong>§ 48.</strong> Har en mand gæld, og <span class="ord" data-forklaring="Adad, guden for storm og regn.">stormguden</span> oversvømmer hans mark og skyller høsten bort, eller vokser kornet ikke på grund af tørke, skal han det år hverken betale korn eller renter.</p>
 <p><strong>§ 129.</strong> Bliver en mands kone grebet i at ligge med en anden mand, skal man binde dem sammen og kaste dem i floden. Vil manden lade sin kone leve, skal <span class="ord" data-forklaring="Den anden mand var kongens undersåt. Derfor er det kongen og ikke konens mand, der benåder ham.">kongen</span> også lade den anden mand leve.</p>
@@ -297,6 +298,68 @@ ul.task-list li input[type="checkbox"] {
     document.addEventListener('click', luk);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') luk(); });
     window.addEventListener('resize', luk);
+  });
+})();
+</script>
+<script>
+// Understreg med musen (Sådan læser du historie, Niels 18. nov. 2026: "Der må også gerne blive lagt op til
+// understregning"). Træk musen hen over ord i teksten, så får de en streg under, som på papir. Et klik på en
+// understregning fjerner den. Kun i sidens tekst (main), ikke i overskrifter, links eller ordenes forklaringsbobler.
+// Understregningerne gemmes ikke: de forsvinder, når siden lukkes.
+(function () {
+  const FORBUDT = 'h1, h2, h3, h4, a, button, .ord-boble, .udtale, .quarto-title, nav, .kreditering';
+  function understreg(range) {
+    let rod = range.commonAncestorContainer;
+    if (rod.nodeType !== 1) rod = rod.parentNode;
+    const noder = [];
+    const gaa = document.createTreeWalker(rod, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!range.intersectsNode(n) || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (n.parentNode.closest(FORBUDT) || n.parentNode.closest('mark.understreg')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    while (gaa.nextNode()) noder.push(gaa.currentNode);
+    noder.forEach(function (n) {
+      const start = n === range.startContainer ? range.startOffset : 0;
+      const slut = n === range.endContainer ? range.endOffset : n.nodeValue.length;
+      if (slut <= start || !n.nodeValue.slice(start, slut).trim()) return;
+      let midt = n;
+      if (start > 0) midt = n.splitText(start);
+      if (slut - start < midt.nodeValue.length) midt.splitText(slut - start);
+      const m = document.createElement('mark');
+      m.className = 'understreg';
+      m.title = 'Klik for at fjerne understregningen';
+      midt.parentNode.insertBefore(m, midt);
+      m.appendChild(midt);
+    });
+  }
+  function fjern(m) {
+    const far = m.parentNode;
+    while (m.firstChild) far.insertBefore(m.firstChild, m);
+    m.remove();
+    far.normalize();
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    const main = document.querySelector('main');
+    if (!main) return;
+    function slip() {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+      if (!main.contains(range.commonAncestorContainer)) return;
+      understreg(range);
+      sel.removeAllRanges();
+    }
+    main.addEventListener('mouseup', function () { setTimeout(slip, 0); });
+    main.addEventListener('touchend', function () { setTimeout(slip, 300); });
+    main.addEventListener('click', function (e) {
+      const m = e.target.closest('mark.understreg');
+      if (!m || e.target.closest('.ord')) return;
+      const sel = window.getSelection();
+      if (sel && !sel.isCollapsed) return;
+      fjern(m);
+    });
   });
 })();
 </script>
